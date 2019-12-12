@@ -3,8 +3,9 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk';
 import { auth as authReducer } from './redux.auth/redux.auth.reducer';
 
-export const store = (initialState: any) => {
-  return createStore(combineReducers({
-    auth: authReducer
-  }), initialState, composeWithDevTools(applyMiddleware(thunkMiddleware)));
-};
+export const store = createStore(
+    combineReducers({ 
+        auth: authReducer
+    }), 
+    composeWithDevTools(applyMiddleware(thunkMiddleware))
+)
