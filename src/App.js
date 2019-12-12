@@ -1,26 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { HashRouter, Switch, Route } from 'react-router-dom';
+//import { PrivateRoute } from './routes/PrivateRoute';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Login } from "./pages/";
+
+import { connect } from 'react-redux';
+
+class AppComponent extends Component {
+	// componentDidMount(){
+	// 	const { dispatch } = this.props;
+	// }
+	render() {
+		return (
+			<HashRouter>
+				<Switch>
+					<Route exact 
+						path='/login' 
+						component={Login} 
+					/>
+
+					{ /* Dashboard */ }
+					{/* <PrivateRoute exact 
+						path='/' 
+						component={DashboardPage} 
+					/> */}
+
+
+					{/* 404 url: called when nothing elase has been called */}
+					{/* <Route component={Page404}></Route> */}
+				</Switch>
+			</HashRouter>
+		);
+	}
 }
+
+// const mapStateToProps = (state) =>{
+// 	const { loggingIn } = state.authentication;
+// 	return {
+// 		loggingIn
+// 	};
+// }
+
+const App = connect(
+	null, 
+	null, 
+	null, 
+	{
+		pure: false
+
+	}
+)(AppComponent);
 
 export default App;
