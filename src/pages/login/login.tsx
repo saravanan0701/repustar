@@ -69,6 +69,9 @@ class Login extends React.Component<IProps, IState> {
       <Layout.Auth title="Login">
         <Form>
             <p>Login Form</p>
+            <button 
+              onClick={() => this.doLogin('allen', 'allen')}
+            >Submit</button>
         </Form>
       </Layout.Auth>
     );

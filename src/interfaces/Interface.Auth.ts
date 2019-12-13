@@ -1,6 +1,6 @@
 export interface ILoginRequest {
-  username: String;
-  password: String;
+  foo1: String;
+  foo2: String;
 }
 
 export interface ILoginResponse {

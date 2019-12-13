@@ -1,4 +1,5 @@
 import { BaseApi } from '../api/Base.API';
+import { endpoints } from '../config/';
 import {
   ILoginRequest,
   ILoginResponse,
@@ -9,11 +10,12 @@ export class RepositorieAuth extends BaseApi {
   public login(email: string, password: string) {
     return new Promise<IAPIResponse<ILoginResponse>>((resolve, reject) => {
         const data: ILoginRequest = {
-            username: email,
-            password: password,
+            foo1: 'bar1',
+            foo2: 'bar2'
           };
 
-          this.getInstance().post('auth_login', data).then((response) => {
+          this.getInstance().post(endpoints.login, data).then((response) => {
+            console.log('response', response);
             const loginResponse = {} as IAPIResponse<ILoginResponse>;
             loginResponse.data = response.data.data;
             resolve(loginResponse);

@@ -1,9 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { api } from '../config';
+import { baseUrl } from '../config';
 import { IAPIRequest } from '../interfaces/Interface.API';
 
 const clientConfig: AxiosRequestConfig = {
-  baseURL: api,
+  baseURL: baseUrl,
   headers:{
     'Content-Type': 'application/json',
   },
