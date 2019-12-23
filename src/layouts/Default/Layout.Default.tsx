@@ -8,10 +8,10 @@ interface IProps {
 class LayoutDefault extends React.Component<IProps, any> {
 
   public componentDidMount() {
-    const session = localStorage.getItem('repustar_token');
-    if (!session) {
-      window.location.href = '/';
-    }
+    // const session = localStorage.getItem('repustar_token');
+    // if (!session) {
+    //   window.location.href = '/';
+    // }
   }
 
 

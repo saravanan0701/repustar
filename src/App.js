@@ -3,7 +3,7 @@ import { Router, Switch, Route} from 'react-router-dom';
 import { history } from './helpers';
 import { PrivateRoute } from './routes/PrivateRoute';
 import { connect } from 'react-redux';
-import { Login} from "./pages/";
+import { Login, WorkbenchHome } from "./pages/";
 
 class AppComponent extends Component {
 	render() {
@@ -13,6 +13,7 @@ class AppComponent extends Component {
             <Switch>
               <PrivateRoute exact path='/home' component={Login} />
               <Route exact path='/' component={Login} />
+			  <Route exact path='/work-bench-home' component={WorkbenchHome} />
             </Switch>
         </div>
       </Router>
