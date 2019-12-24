@@ -1,92 +1,89 @@
 import * as React from 'react';
-import Layout from '../../layouts/Layout';
-import Form from '../../components/Component.Form/Component.Form';
+import { WorkbenchDefaultView } from '../../templates/WorkbenchDefaultView';
 import { withRouter } from 'react-router';
-import { RepositorieAuth } from '../../repositories/Repositorie.Auth';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { loginAction } from '../../redux/redux.auth/redux.auth.action';
-import ErrorCodes from '../../ErrorCodes';
+import { RepositorieWorkbenchTagValidation } from '../../repositories/Repositorie.Workbench.TagValidation';
 import { IError } from '../../interfaces/Interface.Error';
-import Header from '../../components/Component.Header/Component.Header';
-
-interface IProps {
-  userDetails?: any;
-  doHandleLoginResponse?: any;
-}
+import Header from '../../modules/Module.Header/Module.Header';
+import { bindActionCreators } from 'redux';
+import { getArticlesTag } from '../../redux/redux.workbench.tagsvalidation/redux.workbench.tagsvalidation.action';
 
 interface IState {
-  username: string;
-  password: string;
-  rememberMe: boolean;
-  error: boolean;
-  errorMessage: string;
+    articleList?: [];
+    error: boolean;
+    errorMessage: string;
 }
-
-class Home extends React.Component<IProps, IState> {
-  private repositories = new RepositorieAuth();
-  public constructor(props: any) {
-    super(props);
-    this.state = {
-      username: '',
-      password: '',
-      rememberMe: false,
-      error: false,
-      errorMessage: '',
-    };
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-  }
-
-  public handleKeyDown(e:any) {
-    if (e.key === 'Enter') {
-      this.doLogin(this.state.username, this.state.password);
+  
+interface IProps {
+    doHandleArticleTagsResponse?: any;
+    articlesTagValidation?: any;
+}
+  
+class Home extends WorkbenchDefaultView<IProps, IState> {
+    private repositories = new RepositorieWorkbenchTagValidation();
+    public constructor(props: any) {
+        super(props);
+        this.state = {
+        articleList: [],
+        error: false,
+        errorMessage: '',
+        };
+        this.loadArticlesList = this.loadArticlesList.bind(this);
     }
-  }
 
-  public doLogin(username: string, password: string) {
-    this.repositories.login(username, password).then((response) => {
-      this.setState({ error: false, errorMessage: '' });
-      
-      this.props.doHandleLoginResponse(response.data);
-      
-      //Redirect to dashboard
-      //Router.pushRoute('/dashboard');
-      
-    }).catch((error: IError) => {
-      console.log('error ', error);
-      if (error.Error === ErrorCodes.AUTH_INVALID_LOGIN) {
-        this.setState({
-          error: true,
-          errorMessage: 'Your login credentials are wrong. Please try again.',
+    public setPageTitle() {
+        return 'Home';
+    }
+
+    public setPrivateRoute() {
+        return false;
+    }
+
+    public componentDidMount() {
+        this.repositories.getArticleTagsByUser().then((response) => {
+            this.props.doHandleArticleTagsResponse(response.body);
+            this.setState({ articleList: this.props.articlesTagValidation.pending_articles });
+        }).catch((error: IError) => {
+            console.log(error);
         });
-      } else {
-        this.setState({ error: true, errorMessage: '' });
-      }
-    });
-  }
+    }
 
-  public render() {
-    return (
-      <Layout.Default title="Login">
-        <Form>
-            <Header>
-            <p>Workbench Form</p>
-            </Header>
-        </Form>
-      </Layout.Default>
-    );
-  }
+    public loadArticlesList(listType: string){
+        this.setState({ articleList: this.props.articlesTagValidation[listType] });
+    }
+
+    public renderArticles(){
+        if (this.state.articleList && this.state.articleList.length > 0) {
+            return this.state.articleList.map(item => (
+                <p>Workbench</p>
+            ));
+        }
+    }
+
+    public renderContent() {
+        return (
+        <React.Fragment>
+            <Header.WorkbenchSeondaryHeader pendingcount = {this.props.articlesTagValidation.pending_articles.length}
+                completedcount = {this.props.articlesTagValidation.completed_articles.length}
+                onLoadArticlesList = {this.loadArticlesList}
+            />
+            <div>
+                {this.renderArticles()}
+            </div>
+        </React.Fragment>
+        );
+    }
 }
-
-const mapStateToProps = (state: any): IProps => ({
-  userDetails: state.auth,
-});
-
-const mapDispatchToProps = (dispatch: any): IProps => ({
-  doHandleLoginResponse: bindActionCreators(loginAction, dispatch),
-});
-
-export default withRouter(connect<IProps, IProps>(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Home));
+  
+  const mapStateToProps = (state: any): IProps => ({
+    articlesTagValidation: state.articlesTagValidation
+  });
+  
+  const mapDispatchToProps = (dispatch: any): IProps => ({
+    doHandleArticleTagsResponse: bindActionCreators(getArticlesTag, dispatch),
+  });
+  
+  export default withRouter(connect<IProps, IProps>(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(Home));

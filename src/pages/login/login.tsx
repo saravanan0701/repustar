@@ -46,7 +46,7 @@ class Login extends React.Component<IProps, IState> {
     this.repositories.login(username, password).then((response) => {
       this.setState({ error: false, errorMessage: '' });
       
-      this.props.doHandleLoginResponse(response.data);
+      this.props.doHandleLoginResponse(response.body);
       
       //Redirect to dashboard
       //Router.pushRoute('/dashboard');

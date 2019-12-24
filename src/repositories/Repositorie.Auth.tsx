@@ -15,9 +15,8 @@ export class RepositorieAuth extends BaseApi {
           };
 
           this.getInstance().post(endpoints.login, data).then((response) => {
-            console.log('response', response);
             const loginResponse = {} as IAPIResponse<ILoginResponse>;
-            loginResponse.data = response.data.data;
+            loginResponse.body = response.data.data;
             resolve(loginResponse);
           }).catch((error) => {
             reject(error);

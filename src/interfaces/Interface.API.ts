@@ -4,6 +4,7 @@ export interface IAPIRequest<T> {
   }
   
   export interface IAPIResponse<T> {
-    error: string;
-    data: T;
+    error?: string;
+    body: T;
+    statusCode: number;
   }

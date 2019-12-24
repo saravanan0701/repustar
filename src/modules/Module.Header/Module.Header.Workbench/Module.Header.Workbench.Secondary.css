@@ -1,0 +1,37 @@
+.secondary_header{
+    height: 70px;
+    width: 100%;
+    display: flex;
+    background-color: #FFFFFF;
+}
+
+.secondary_header__left_panel{
+    display: flex;
+    width: 100%;
+    margin-top: 24px;
+}
+
+.secondary_header__menu--ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    width: 100%;
+}
+
+.secondary_header__menu--list:first-child{
+    margin-left: 30px;
+}
+
+.secondary_header__menu--list{
+    padding-right: 24px;
+}
+
+.secondary_header__menu--list_item{
+    height: 21px;
+    width: 100%;
+    color: rgba(0,0,0,0.85);;	
+    font-family: "SF Pro Text";	
+    font-size: 18px;	
+    line-height: 21px;
+}

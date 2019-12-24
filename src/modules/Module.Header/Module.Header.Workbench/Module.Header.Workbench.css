@@ -1,0 +1,80 @@
+.header{
+    height: 93px;
+    background-color:  #313131;
+    width: 100%;
+    display: flex;
+}
+
+.header__left_panel{
+    display: flex;
+    padding-left: 110px;
+}
+
+.header__brand_logo{
+    padding-top: 24px;
+    height: 43px;
+    width: 188px;
+}
+
+.header__module_name{
+    height: 19px;
+    width: 240px;
+    padding-left: 20px;
+    padding-top:37px;
+    color: #848484;	
+    font-family: "SF Pro Text";	
+    font-size: 16px;	
+    font-weight: 500;	
+    letter-spacing: 1.2px;	
+    line-height: 19px;
+}
+
+.header__menu_panel{
+    width: 100%;
+    display: flex;
+    margin-right: 115px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.header__menu--ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    width: 176px;
+}
+
+.header__menu--list{
+    width: 100%;
+}
+
+.header__menu--list_item{
+    height: 21px;
+    width: 50px;	
+    color: #FFFFFF;	
+    font-family: "SF Pro Text";	
+    font-size: 18px;	
+    line-height: 21px;
+}
+
+.header__right_panel{
+    display: flex;
+    margin-top: 33px;
+    margin-right: 110px;
+    justify-content: flex-end;
+    width: 62px;
+    height: 24px;
+}
+
+.header__user_icon{
+    height: 24px;
+    width: 24px;
+}
+
+.header__menu_drop_down{
+    margin-left: 23px;
+    height: 24px;
+    width: 24px;
+}
