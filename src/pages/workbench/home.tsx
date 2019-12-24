@@ -6,7 +6,12 @@ import { RepositorieWorkbenchTagValidation } from '../../repositories/Repositori
 import { IError } from '../../interfaces/Interface.Error';
 import Header from '../../modules/Module.Header/Module.Header';
 import { bindActionCreators } from 'redux';
-import { getArticlesTag } from '../../redux/redux.workbench.tagsvalidation/redux.workbench.tagsvalidation.action';
+import { getArticlesTag, setActiveWBAciveArticles } from '../../redux/redux.workbench.tagsvalidation/redux.workbench.tagsvalidation.action';
+import './home.css'; 
+import one from '../../static/1.svg';
+import two from '../../static/2.svg';
+import three from '../../static/3.svg';
+import four from '../../static/4.svg';
 
 interface IState {
     articleList?: [];
@@ -17,6 +22,7 @@ interface IState {
 interface IProps {
     doHandleArticleTagsResponse?: any;
     articlesTagValidation?: any;
+    setActiveWBAciveArticles?: any;
 }
   
 class Home extends WorkbenchDefaultView<IProps, IState> {
@@ -49,14 +55,35 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
     }
 
     public loadArticlesList(listType: string){
-        this.setState({ articleList: this.props.articlesTagValidation[listType] });
+        this.props.setActiveWBAciveArticles(this.props.articlesTagValidation[listType]);
+        //this.setState({ articleList: this.props.articlesTagValidation[listType] });
     }
 
-    public renderArticles(){
-        if (this.state.articleList && this.state.articleList.length > 0) {
-            return this.state.articleList.map(item => (
-                <p>Workbench</p>
+    public renderArticles(){        
+        if (this.props.articlesTagValidation.active_wb_article_list && this.props.articlesTagValidation.active_wb_article_list.length > 0) {
+            console.log('this.props.articlesTagValidation.active_wb_article_list.length ', this.props.articlesTagValidation.active_wb_article_list.length);
+            console.log(this.props.articlesTagValidation.active_wb_article_list);
+            console.log('return Math.floor(Math.random() * Math.floor(max));', Math.floor(Math.random() * Math.floor(4)))
+            //let random = Math.floor(Math.random() * Math.floor(4));
+            return this.props.articlesTagValidation.active_wb_article_list.map((item: any, i:number) => (
+                <div key={i}>
+                    {/* <p>{item.article_id}</p> */}
+                    <div className='card_container'>
+                        <div>
+                            <img src={'./static/'+ (Math.floor(Math.random() * (4 - 1 + 1)) + 1) +'.svg'} alt='brand_logo' className='image_container'/>
+                        </div>
+                        <div className='article_content'>
+                            <a href='https://medium.com' target='_blank' className='article_site'>MEDIUM.COM</a>
+                            
+                            <span className='article_description'>
+                                {item.article_id}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             ));
+        }else{
+            return(<div></div>);
         }
     }
 
@@ -67,7 +94,7 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
                 completedcount = {this.props.articlesTagValidation.completed_articles.length}
                 onLoadArticlesList = {this.loadArticlesList}
             />
-            <div>
+            <div className='articles_list_container'>
                 {this.renderArticles()}
             </div>
         </React.Fragment>
@@ -81,6 +108,7 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
   
   const mapDispatchToProps = (dispatch: any): IProps => ({
     doHandleArticleTagsResponse: bindActionCreators(getArticlesTag, dispatch),
+    setActiveWBAciveArticles: bindActionCreators(setActiveWBAciveArticles, dispatch),
   });
   
   export default withRouter(connect<IProps, IProps>(
