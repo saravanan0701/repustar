@@ -6,12 +6,12 @@ import { RepositorieWorkbenchTagValidation } from '../../repositories/Repositori
 import { IError } from '../../interfaces/Interface.Error';
 import Header from '../../modules/Module.Header/Module.Header';
 import { bindActionCreators } from 'redux';
-import { getArticlesTag, setActiveWBAciveArticles } from '../../redux/redux.workbench.tagsvalidation/redux.workbench.tagsvalidation.action';
-import './home.css'; 
-import one from '../../static/1.svg';
-import two from '../../static/2.svg';
-import three from '../../static/3.svg';
-import four from '../../static/4.svg';
+import { getArticlesTag, 
+    setActiveWBAciveArticles,
+    setActiveArticleIndex,
+    setActiveArticle
+} from '../../redux/redux.workbench.tagsvalidation/redux.workbench.tagsvalidation.action';
+import './home.css';
 
 interface IState {
     articleList?: [];
@@ -23,6 +23,9 @@ interface IProps {
     doHandleArticleTagsResponse?: any;
     articlesTagValidation?: any;
     setActiveWBAciveArticles?: any;
+    setActiveArticleIndex?: any;
+    setActiveArticle?: any;
+    history?: any;
 }
   
 class Home extends WorkbenchDefaultView<IProps, IState> {
@@ -54,6 +57,13 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
         });
     }
 
+    public validateTags(index: number){
+        this.props.setActiveArticleIndex(index);
+        //const currentArticle = this.props.articlesTagValidation.active_wb_article_list[index];
+        this.props.setActiveArticle(this.props.articlesTagValidation.active_wb_article_list[index]);
+        this.props.history.push('/work-bench-tags-validation');
+    }
+
     public loadArticlesList(listType: string){
         this.props.setActiveWBAciveArticles(this.props.articlesTagValidation[listType]);
         //this.setState({ articleList: this.props.articlesTagValidation[listType] });
@@ -61,14 +71,9 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
 
     public renderArticles(){        
         if (this.props.articlesTagValidation.active_wb_article_list && this.props.articlesTagValidation.active_wb_article_list.length > 0) {
-            console.log('this.props.articlesTagValidation.active_wb_article_list.length ', this.props.articlesTagValidation.active_wb_article_list.length);
-            console.log(this.props.articlesTagValidation.active_wb_article_list);
-            console.log('return Math.floor(Math.random() * Math.floor(max));', Math.floor(Math.random() * Math.floor(4)))
-            //let random = Math.floor(Math.random() * Math.floor(4));
             return this.props.articlesTagValidation.active_wb_article_list.map((item: any, i:number) => (
                 <div key={i}>
-                    {/* <p>{item.article_id}</p> */}
-                    <div className='card_container'>
+                    <div className='card_container' onClick={() => this.validateTags(i)}>
                         <div>
                             <img src={'./static/'+ (Math.floor(Math.random() * (4 - 1 + 1)) + 1) +'.svg'} alt='brand_logo' className='image_container'/>
                         </div>
@@ -109,6 +114,8 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
   const mapDispatchToProps = (dispatch: any): IProps => ({
     doHandleArticleTagsResponse: bindActionCreators(getArticlesTag, dispatch),
     setActiveWBAciveArticles: bindActionCreators(setActiveWBAciveArticles, dispatch),
+    setActiveArticleIndex: bindActionCreators(setActiveArticleIndex, dispatch),
+    setActiveArticle: bindActionCreators(setActiveArticle, dispatch),
   });
   
   export default withRouter(connect<IProps, IProps>(
