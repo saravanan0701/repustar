@@ -57,6 +57,7 @@
     font-family: "SF Pro Text";	
     font-size: 18px;	
     line-height: 21px;
+    text-decoration:none;
 }
 
 .header__right_panel{

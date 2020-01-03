@@ -39,13 +39,13 @@ export default class WorkbenchHeader extends React.Component<IProps, any> {
             <div className='header__menu_panel'>
                 <ul className='header__menu--ul'>
                     <li className='header__menu--list'>
-                        <span className='header__menu--list_item'>
-                            Home
+                        <span>
+                          <a href='/work-bench-home' className='header__menu--list_item'>Home</a>
                         </span>
                     </li>
                     <li className='header__menu--list'>
                         <span className='header__menu--list_item'>
-                        Help
+                          Help
                         </span>
                     </li>
                 </ul>

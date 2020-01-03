@@ -22,11 +22,11 @@ export const setActiveList = (articlsList: any) => {
 
 export const setActiveArticleIndex = (articleIndex: number) =>{
   return (dispatch: any) => {
-    dispatch({
-      type: WBATV_SET_ACTIVE_WB_ARTICLES_INDEX,
-      payload: articleIndex,
-    });    
-};
+      dispatch({
+        type: WBATV_SET_ACTIVE_WB_ARTICLES_INDEX,
+        payload: articleIndex,
+      });    
+  };
 }
 
 export const setActiveArticle = (article: any) =>{
@@ -36,11 +36,11 @@ export const setActiveArticle = (article: any) =>{
   }
   
   return (dispatch: any) => {
-    dispatch({
-      type: WBATV_SET_ACTIVE_WB_ARTICLES,
-      payload: article,
-    });    
-};
+      dispatch({
+        type: WBATV_SET_ACTIVE_WB_ARTICLES,
+        payload: article,
+      });    
+  };
 }
 
 export const setActiveWBAciveArticles = (articlsList: any) =>  {

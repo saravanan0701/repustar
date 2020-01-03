@@ -9,6 +9,7 @@ import { getArticlesTag, setActiveWBAciveArticles, setActiveArticle } from '../.
 import './home.css';
 import './tags.css'; 
 import { tagTypeMapping } from '../../config';
+import ArticleCard from '../../components/Component.ArticleCard/Component.ArticleCard';
 
 interface IState {
     articleList?: [];
@@ -148,8 +149,7 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
             <div className="article_tags_container__tags--row" key={idx}>    
               { 
                 row.map( (validated_tags:any) => 
-                            this.renderTagsCell(validated_tags, title, columnIndex++, tagTypeIndex)
-                        
+                            this.renderTagsCell(validated_tags, title, columnIndex++, tagTypeIndex) 
                     )
                 }
             </div> 
@@ -193,18 +193,11 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
             return (
                 <div>
                     {/* <p>{item.article_id}</p> */}
-                    <div className='card_container'>
-                        <div>
-                            <img src={'./static/'+ (Math.floor(Math.random() * (4 - 1 + 1)) + 1) +'.svg'} alt='brand_logo' className='image_container'/>
-                        </div>
-                        <div className='article_content'>
-                            <a href='https://medium.com' target='_blank' className='article_site'>MEDIUM.COM</a>
-                            
-                            <span className='article_description'>
-                                {currentArticle.article_id}
-                            </span>
-                        </div>
-                    </div>
+                    <ArticleCard article_image={currentArticle.article_image} 
+                        article_url={currentArticle.article_url} 
+                        article_title={currentArticle.article_title} 
+                        is_target_blank={true}
+                        article_site_name={currentArticle.article_site_name}/>
                 </div>
             );
         }else{

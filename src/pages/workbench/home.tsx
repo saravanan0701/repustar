@@ -12,6 +12,7 @@ import { getArticlesTag,
     setActiveArticle
 } from '../../redux/redux.workbench.tagsvalidation/redux.workbench.tagsvalidation.action';
 import './home.css';
+import ArticleCard from '../../components/Component.ArticleCard/Component.ArticleCard';
 
 interface IState {
     articleList?: [];
@@ -72,19 +73,11 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
     public renderArticles(){        
         if (this.props.articlesTagValidation.active_wb_article_list && this.props.articlesTagValidation.active_wb_article_list.length > 0) {
             return this.props.articlesTagValidation.active_wb_article_list.map((item: any, i:number) => (
-                <div key={i}>
-                    <div className='card_container' onClick={() => this.validateTags(i)}>
-                        <div>
-                            <img src={'./static/'+ (Math.floor(Math.random() * (4 - 1 + 1)) + 1) +'.svg'} alt='brand_logo' className='image_container'/>
-                        </div>
-                        <div className='article_content'>
-                            <a href='https://medium.com' target='_blank' className='article_site'>MEDIUM.COM</a>
-                            
-                            <span className='article_description'>
-                                {item.article_id}
-                            </span>
-                        </div>
-                    </div>
+                <div key={i} onClick={() => this.validateTags(i)}>
+                    <ArticleCard article_image={item.article_image} 
+                        article_title={item.article_title}
+                        is_target_blank={false}
+                        article_site_name={item.article_site_name} />
                 </div>
             ));
         }else{
