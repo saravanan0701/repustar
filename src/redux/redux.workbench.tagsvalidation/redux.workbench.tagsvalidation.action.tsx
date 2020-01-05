@@ -11,16 +11,21 @@ export const getArticlesTag = (articlsList: any) => (dispatch: any) => {
   
   let completedArticles = articlsList.filter( (it: any) => it.is_validated === true );
   dispatch({ type: WBATV_SET_COMPLETED_ARTICLES, payload: completedArticles });
-  dispatch(setActiveList(pendingArticles));
+  if (localStorage.getItem('active_list_type') === 'completed_articles'){
+    dispatch(setActiveList(completedArticles, 'completed_articles'));
+  }else {
+    dispatch(setActiveList(pendingArticles, 'pending_articles'));
+  } 
 };
 
-export const setActiveList = (articlsList: any) => {  
+export const setActiveList = (articlsList: any, listType: string) => {  
   return (dispatch: any) => {
-      dispatch(setActiveWBAciveArticles(articlsList));    
+      dispatch(setActiveWBAciveArticles(articlsList, listType));    
   };
 };
 
-export const setActiveArticleIndex = (articleIndex: number) =>{
+export const setActiveArticleIndex = (articleIndex: any) =>{
+  localStorage.setItem('active_list_id', articleIndex);
   return (dispatch: any) => {
       dispatch({
         type: WBATV_SET_ACTIVE_WB_ARTICLES_INDEX,
@@ -43,7 +48,8 @@ export const setActiveArticle = (article: any) =>{
   };
 }
 
-export const setActiveWBAciveArticles = (articlsList: any) =>  {
+export const setActiveWBAciveArticles = (articlsList: any, listType: string) =>  {
+  localStorage.setItem('active_list_type', listType);
   return {
     type: WBATV_SET_ACTIVE_WB_ARTICLES_LIST,
     payload: articlsList,

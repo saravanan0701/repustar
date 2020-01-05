@@ -35,3 +35,8 @@
     font-size: 18px;	
     line-height: 21px;
 }
+
+.secondary_header__menu--selected_item{
+    border: 2px solid #027AFF;
+    margin-top: 21px;
+}

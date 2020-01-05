@@ -50,15 +50,8 @@
 
 .tags--add-new--sapn{
     margin: auto; 
-    /* text-align: center; */
     justify-content: center;
-    /* align-content: center; */
-    /* padding: 0px; */
-    /* margin-left: auto; */
-    /* margin-right: auto; */
     display: flex;
-    /* text-align: center; */
-    /* align-items: center; */
     padding-top: 19px;
 }
 
@@ -84,16 +77,9 @@
 }
 
 .tags--sapn{
-    /* align-content: center; */
-    /* padding: 0px; */
-    /* margin-left: auto; */
-    /* margin-right: auto; */
     display: flex;
-    /* text-align: center; */
-    /* align-items: center; */
     padding-top: 19px;
     padding-bottom: 20px;
-    /* overflow-wrap: break-word; */
     padding-left: 14px;
     padding-right: 18px;
     width: 100%;
@@ -132,7 +118,8 @@
 
 .article_action_buttons_container{
     height: 121px;
-    border: 1px solid #979797;	background-color: #E8EAEE;
+    border: 1px solid #979797;	
+    background-color: #E8EAEE;
     display: flex;
     width: 100%;
     justify-content: flex-end
@@ -141,7 +128,53 @@
 .article_action_buttons_container--save{
     margin-right: 30px;
     margin-top: 30px;
-    height: 60px;	width: 270px;	background-color: #000000;
+    height: 60px;	
+    width: 270px;	
+    background-color: #000000;
     color: #ffffff;
-    font-family: "SF Pro Text";	font-size: 18px;	font-weight: bold;	line-height: 21px;	text-align: center;
+    font-family: "SF Pro Text";	
+    font-size: 18px;	
+    font-weight: bold;	
+    line-height: 21px;	
+    text-align: center;
+}
+
+.article_action_buttons_container--next_article{
+    margin-right: 30px;
+    margin-top: 30px;
+    height: 60px;	
+    width: 270px;	
+    background-color: #fffffe;
+    color: #000000;
+    font-family: "SF Pro Text";	
+    font-size: 18px;	
+    font-weight: bold;	
+    line-height: 21px;	
+    text-align: center;
+}
+
+.articles_navigation_tool_container{
+    display: flex;
+    width: 100%;
+}
+
+.articles_navigation_tool_container--back_button{
+    margin-bottom: 30px;
+    width: 100%;
+    color: #006BE1;	
+    font-family: "SF Pro Text";	
+    font-size: 16px;	
+    line-height: 16px;
+    text-decoration:none;
+}
+
+.articles_navigation_tool_container--article_count{
+    justify-content: flex-end;
+    width: 100%;
+    text-align: right;
+    color: rgba(0,0,0,0.85);	
+    font-family: "SF Pro Text";	
+    font-size: 20px;	
+    font-weight: bold;	
+    line-height: 24px;
 }

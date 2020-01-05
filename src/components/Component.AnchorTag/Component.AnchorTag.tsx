@@ -1,5 +1,4 @@
   
-// import './Component.AnchorTag.css';
 import * as React from 'react';
 
 interface IProps {

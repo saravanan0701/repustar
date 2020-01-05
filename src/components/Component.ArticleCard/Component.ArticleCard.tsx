@@ -20,7 +20,7 @@ export default class ArticleCard extends React.Component<IProps, any> {
                 <img src={this.props.article_image} alt='brand_logo' className='image_container'/>
             </div>
             <div className='article_content'>
-                <AnchorTag url={this.props.article_url} isTargetBlank = {this.props.is_target_blank} linkText={this.props.article_site_name} />\
+                <AnchorTag url={this.props.article_url} isTargetBlank = {this.props.is_target_blank} linkText={this.props.article_site_name} />
                 <span className='article_description'>
                     {this.props.article_title}
                 </span>

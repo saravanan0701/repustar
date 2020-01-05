@@ -9,6 +9,7 @@ interface IProps {
   pendingcount: number;
   completedcount: number;
   onLoadArticlesList?: any;
+  activeMenu: string;
 }
 
 export default class WorkbenchSecondaryHeader extends React.Component<IProps, any> {
@@ -37,11 +38,17 @@ export default class WorkbenchSecondaryHeader extends React.Component<IProps, an
                         <span className='secondary_header__menu--list_item'>
                             {this.props.pendingcount} Pending Articles
                         </span>
+                        {
+                          this.props.activeMenu === 'pending_articles' ? <hr className='secondary_header__menu--selected_item'></hr> : ''
+                        }
                     </li>
                     <li className='secondary_header__menu--list' onClick={() => this.loadArticles('completed_articles')}>
                         <span className='secondary_header__menu--list_item'>
                             {this.props.completedcount} Completed Articles
                         </span>
+                        {
+                          this.props.activeMenu === 'completed_articles' ? <hr className='secondary_header__menu--selected_item'></hr> : ''
+                        }
                     </li>
                 </ul>
             </div>

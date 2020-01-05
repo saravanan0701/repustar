@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { RepositorieWorkbenchTagValidation } from '../../repositories/Repositorie.Workbench.TagValidation';
 import { IError } from '../../interfaces/Interface.Error';
 import { bindActionCreators } from 'redux';
-import { getArticlesTag, setActiveWBAciveArticles, setActiveArticle } from '../../redux/redux.workbench.tagsvalidation/redux.workbench.tagsvalidation.action';
+import { getArticlesTag, setActiveWBAciveArticles, setActiveArticle, setActiveArticleIndex } from '../../redux/redux.workbench.tagsvalidation/redux.workbench.tagsvalidation.action';
 import './home.css';
 import './tags.css'; 
 import { tagTypeMapping } from '../../config';
@@ -18,6 +18,8 @@ interface IState {
     rowIndex?: number;
     columnIndex?: number;
     newTag: string;
+    isPendingArticle: boolean;
+    isLastArticle: boolean;
 }
   
 interface IProps {
@@ -25,6 +27,7 @@ interface IProps {
     articlesTagValidation?: any;
     setActiveWBAciveArticles?: any;
     setActiveArticle?: any;
+    setActiveArticleIndex?: any;
     history?: any;
 }
   
@@ -39,13 +42,15 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
         rowIndex: 0,
         columnIndex: 0,
         newTag: '',
+        isPendingArticle: false,
+        isLastArticle: false,
         };
-        this.loadArticlesList = this.loadArticlesList.bind(this);
         this.handleAddTag = this.handleAddTag.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
     public setPageTitle() {
-        return 'Home';
+        return 'Article Tags';
     }
 
     public setPrivateRoute() {
@@ -53,10 +58,20 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
     }
 
     public componentDidMount() {
+        if (localStorage.getItem('active_list_type') === 'pending_articles'){
+            this.setState({isPendingArticle : true});
+        }
+
+        let article_index: any = localStorage.getItem('active_list_id');
+        
         this.repositories.getArticleTagsByUser().then((response) => {
             this.props.doHandleArticleTagsResponse(response.body);
-            this.setState({ articleList: this.props.articlesTagValidation.pending_articles });
+            this.props.setActiveArticleIndex(article_index);
             this.props.setActiveArticle(this.props.articlesTagValidation.active_wb_article_list[this.props.articlesTagValidation.active_article_index]);
+            if(this.props.articlesTagValidation.active_wb_article_list.length - 1 === parseInt(article_index)){
+                //isLastArticle
+                this.setState({isLastArticle : true});
+            }
         }).catch((error: IError) => {
             console.log(error);
         });
@@ -70,10 +85,12 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
         this.setState({rowIndex: 0, columnIndex: 0});
     }
 
-    saveNewTag(columnIndex:number, rowIndex:number){
-        this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1] = [...this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1], this.state.newTag];
-        //this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1].push(this.state.newTag);
-        this.setState({newTag : ''});
+    public handleKeyDown(e: any) {
+        if (e.key === 'Enter') {
+            let rowIndex: any = this.state.rowIndex;
+            this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1] = [...this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1], this.state.newTag];
+            this.setState({newTag : ''});
+        }
     }
 
     deleteTag(columnIndex:number, rowIndex:number){
@@ -87,18 +104,25 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
         this.setState({newTag : e.target.value});
     }
 
-    public loadArticlesList(listType: string){
-        this.props.setActiveWBAciveArticles(this.props.articlesTagValidation[listType]);
-    }
-
     public saveArticleValidation(){
         this.props.articlesTagValidation.active_article.is_validated = true;
         const article_validated_id = this.props.articlesTagValidation.active_article.article_validated_id;
         this.repositories.saveArticleTags(this.props.articlesTagValidation.active_article, article_validated_id).then((response) => {
-            this.props.history.push('/work-bench-home');
+            // Notification Alert
         }).catch((error: IError) => {
             console.log(error);
         });
+    }
+
+    public nextArticle(){
+        console.log('Next Article');
+        const next_article_id = parseInt(this.props.articlesTagValidation.active_article_index) + 1;
+        this.props.setActiveArticleIndex(next_article_id);
+        this.props.setActiveArticle(this.props.articlesTagValidation.active_wb_article_list[next_article_id]);
+        if(this.props.articlesTagValidation.active_wb_article_list.length - 1 === next_article_id){
+            //isLastArticle
+            this.setState({isLastArticle : true});
+        }
     }
 
     public renderTagsCell(tagText:any, title: string, columnIndex: number, tagTypeIndex: number){
@@ -107,8 +131,8 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
                 return(<div className='article_tags_container__tags--column add_new_tag'>
                     <input className='add_new_tag--input' type='text' onChange={this.handleAddTag}
                     name="newTag"
+                    onKeyDown={(e) => this.handleKeyDown(e)}
                     ></input>
-                    <img src={'./static/close-black.svg'} alt='save_tag' className='delete_tag' onClick={() => this.saveNewTag(columnIndex,tagTypeIndex)}/>
                     <img src={'./static/close-black.svg'} alt='cancel_tag' className='delete_tag' onClick={() => this.cancelAddTag()}/>
                 </div>);
             }else{
@@ -120,7 +144,11 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
             return(<div className='article_tags_container__tags--column tags'>
                 <span className='tags--index'> {columnIndex} </span>
                 <span className='tags--sapn'>{tagText}</span>
-                <img src={'./static/close-black.svg'} alt='delete_tag' className='delete_tag' onClick={() => this.deleteTag(columnIndex,tagTypeIndex)}/>
+                {
+                    this.state.isPendingArticle 
+                    ? <img src={'./static/close-black.svg'} alt='delete_tag' className='delete_tag' onClick={() => this.deleteTag(columnIndex,tagTypeIndex)}/>
+                    : <div></div>
+                }
             </div>);
         }
     }
@@ -134,14 +162,16 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
             return acc;
           }, []);
         
-        if(res.length > 0){
-            if(res[res.length -1 ].length === 4){
-                res.push(['Add New Tag'])
+        if(this.state.isPendingArticle){
+            if(res.length > 0){
+                if(res[res.length -1 ].length === 4){
+                    res.push(['Add New Tag'])
+                }else{
+                    res[res.length -1 ].push('Add New Tag');
+                }
             }else{
-                res[res.length -1 ].push('Add New Tag');
+                res.push(['Add New Tag']);
             }
-        }else{
-            res.push(['Add New Tag']);
         }
 
         let columnIndex = 1;
@@ -210,13 +240,30 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
             return (
                 <React.Fragment>
                     <div className='articles_list_container'>
+                        <div className='articles_navigation_tool_container'>
+                            <a href='/work-bench-home' className='articles_navigation_tool_container--back_button'>  &lt; Back </a>
+                            {
+                            this.state.isPendingArticle 
+                                ?  <span className='articles_navigation_tool_container--article_count'> {this.props.articlesTagValidation.pending_articles.length} Articles Pending</span>
+                                :  <span className='articles_navigation_tool_container--article_count'> {this.props.articlesTagValidation.completed_articles.length} Articles Completed</span>
+                            }
+                        </div>
                         {this.renderArticlesCard()}
                         <div className='article_tags_container'>
                             {this.renderArticlesTags()}    
                         </div>
                         <div className='article_action_buttons_container'>
-                            <input className='article_action_buttons_container--save' type='button' value='Save' onClick={() => this.saveArticleValidation()}></input>
-                        </div>
+                            {
+                            this.state.isPendingArticle 
+                                ? 
+                                        <input className='article_action_buttons_container--save' type='button' value='Save' onClick={() => this.saveArticleValidation()}></input>                          
+                                : <div></div>
+                            }
+                            {
+                                this.state.isLastArticle ? <div></div>
+                                : <input className='article_action_buttons_container--next_article' type='button' value='Next Article >' onClick={() => this.nextArticle()}></input>
+                            }
+                        </div>  
                     </div> 
                 </React.Fragment>
                 );
@@ -232,6 +279,7 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
     doHandleArticleTagsResponse: bindActionCreators(getArticlesTag, dispatch),
     setActiveWBAciveArticles: bindActionCreators(setActiveWBAciveArticles, dispatch),
     setActiveArticle: bindActionCreators(setActiveArticle, dispatch),
+    setActiveArticleIndex: bindActionCreators(setActiveArticleIndex, dispatch),
   });
   
   export default withRouter(connect<IProps, IProps>(

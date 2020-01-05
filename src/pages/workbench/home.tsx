@@ -18,6 +18,7 @@ interface IState {
     articleList?: [];
     error: boolean;
     errorMessage: string;
+    activeList: string;
 }
   
 interface IProps {
@@ -37,6 +38,7 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
         articleList: [],
         error: false,
         errorMessage: '',
+        activeList: '',
         };
         this.loadArticlesList = this.loadArticlesList.bind(this);
     }
@@ -50,9 +52,12 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
     }
 
     public componentDidMount() {
+        localStorage.removeItem('active_list_id');
+        localStorage.removeItem('active_list_type');
         this.repositories.getArticleTagsByUser().then((response) => {
             this.props.doHandleArticleTagsResponse(response.body);
             this.setState({ articleList: this.props.articlesTagValidation.pending_articles });
+            this.setState({ activeList: 'pending_articles' })
         }).catch((error: IError) => {
             console.log(error);
         });
@@ -60,14 +65,13 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
 
     public validateTags(index: number){
         this.props.setActiveArticleIndex(index);
-        //const currentArticle = this.props.articlesTagValidation.active_wb_article_list[index];
         this.props.setActiveArticle(this.props.articlesTagValidation.active_wb_article_list[index]);
         this.props.history.push('/work-bench-tags-validation');
     }
 
     public loadArticlesList(listType: string){
-        this.props.setActiveWBAciveArticles(this.props.articlesTagValidation[listType]);
-        //this.setState({ articleList: this.props.articlesTagValidation[listType] });
+        this.props.setActiveWBAciveArticles(this.props.articlesTagValidation[listType], listType);
+        this.setState({ activeList: listType })
     }
 
     public renderArticles(){        
@@ -91,6 +95,7 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
             <Header.WorkbenchSeondaryHeader pendingcount = {this.props.articlesTagValidation.pending_articles.length}
                 completedcount = {this.props.articlesTagValidation.completed_articles.length}
                 onLoadArticlesList = {this.loadArticlesList}
+                activeMenu = {this.state.activeList}
             />
             <div className='articles_list_container'>
                 {this.renderArticles()}

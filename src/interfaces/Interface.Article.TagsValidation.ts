@@ -9,6 +9,10 @@ export interface IArticleTagsValidationResponse {
     is_validated: Boolean;
     tag_text: any;
     validated_tags?: any;
+    article_url: string;
+    article_image: string;
+    article_title: string;
+    article_site_name: string;
 }
 
 export interface IArticleTagsValidationRequest {
@@ -22,4 +26,8 @@ export interface IArticleTagsValidationRequest {
     is_validated: Boolean;
     tag_text: any;
     validated_tags: any;
+    article_url: string;
+    article_image: string;
+    article_title: string;
+    article_site_name: string;
 }
