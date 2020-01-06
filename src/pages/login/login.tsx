@@ -8,10 +8,12 @@ import { bindActionCreators } from 'redux';
 import { loginAction } from '../../redux/redux.auth/redux.auth.action';
 import ErrorCodes from '../../ErrorCodes';
 import { IError } from '../../interfaces/Interface.Error';
+import './login.css';
 
 interface IProps {
   userDetails?: any;
   doHandleLoginResponse?: any;
+  history?: any;
 }
 
 interface IState {
@@ -38,29 +40,16 @@ class Login extends React.Component<IProps, IState> {
 
   public handleKeyDown(e:any) {
     if (e.key === 'Enter') {
-      this.doLogin(this.state.username, this.state.password);
+      this.doLogin();
     }
   }
 
-  public doLogin(username: string, password: string) {
-    this.repositories.login(username, password).then((response) => {
-      this.setState({ error: false, errorMessage: '' });
-      
-      this.props.doHandleLoginResponse(response.body);
-      
-      //Redirect to dashboard
-      //Router.pushRoute('/dashboard');
-      
+  public doLogin() {
+    this.repositories.login(this.state.username, this.state.password).then((response) => {
+      localStorage.setItem('user_id', '1');
+      this.props.history.push('/work-bench-home');      
     }).catch((error: IError) => {
-      console.log('error ', error);
-      if (error.Error === ErrorCodes.AUTH_INVALID_LOGIN) {
-        this.setState({
-          error: true,
-          errorMessage: 'Your login credentials are wrong. Please try again.',
-        });
-      } else {
-        this.setState({ error: true, errorMessage: '' });
-      }
+      // Notification for failed login
     });
   }
 
@@ -68,10 +57,26 @@ class Login extends React.Component<IProps, IState> {
     return (
       <Layout.Auth title="Login">
         <Form>
-            <p>Login Form</p>
+            <span className='auth_title'>Login</span>
+            <span className='auth_subtext'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
+
+            <div className='auth_input_container'>
+              <input type='text' 
+                className='auth_input'
+                placeholder='Email'
+                onChange={(e) => this.setState({ username: e.currentTarget.value })}
+                ></input>
+              <input type='password' 
+                className='auth_input'
+                placeholder='Password'
+                onChange={(e) => this.setState({ password: e.currentTarget.value })}
+                onKeyDown={(e) => this.handleKeyDown(e)}
+                ></input>
+            </div>        
             <button 
-              onClick={() => this.doLogin('allen', 'allen')}
-            >Submit</button>
+              className='auth_action_button'
+              onClick={() => this.doLogin()}
+            >Login</button>
         </Form>
       </Layout.Auth>
     );

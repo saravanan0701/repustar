@@ -1,0 +1,5 @@
+.form_container{
+    width: 100%;
+    max-width: 428px;
+    display: grid;
+}

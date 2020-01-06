@@ -7,16 +7,6 @@ const clientConfig: AxiosRequestConfig = {
   headers:{
     'Content-Type': 'application/json',
   },
-  // transformRequest: [
-  //   (data:any) => {
-  //     const token = localStorage.getItem('repustar_token');
-  //     const request: IAPIRequest<any> = {
-  //       data: data,
-  //       token: token
-  //     };
-  //     return JSON.stringify(request);
-  //   },
-  // ],
 };
 
 export const HTTP: AxiosInstance = axios.create(clientConfig);

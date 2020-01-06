@@ -5,22 +5,16 @@ import {
   ILoginResponse,
 } from '../interfaces/Interface.Auth';
 import { IAPIResponse } from '../interfaces/Interface.API';
+import { Auth } from "aws-amplify";
 
 export class RepositorieAuth extends BaseApi {
   public login(email: string, password: string) {
-    return new Promise<IAPIResponse<ILoginResponse>>((resolve, reject) => {
-        const data: ILoginRequest = {
-            foo1: 'bar1',
-            foo2: 'bar2'
-          };
-
-          this.getInstance().post(endpoints.login, data).then((response) => {
-            const loginResponse = {} as IAPIResponse<ILoginResponse>;
-            loginResponse.body = response.data.data;
-            resolve(loginResponse);
-          }).catch((error) => {
-            reject(error);
-          });
+    return new Promise((resolve, reject) => {
+        Auth.signIn(email, password).then((response) =>{
+          resolve(response);
+        }).catch((error) => {
+          reject(error);
+        });
     });
   }
 

@@ -5,15 +5,24 @@ import './Module.Header.Workbench.css';
 import repustar_logo from '../../../static/repustar_logo.svg';
 import menu_down from '../../../static/menu_down.svg';
 import user_icon from '../../../static/user.svg';
-
+import { Auth } from "aws-amplify";
+import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
 
 interface IProps {
   title?: string;
+  history?: any;
 }
 
-export default class WorkbenchHeader extends React.Component<IProps, any> {
+class WorkbenchHeader extends React.Component<IProps, any> {
   public constructor(props: any) {
     super(props);
+  }
+
+  public handleLogout() {
+    Auth.signOut();
+    //userHasAuthenticated(false);
+    this.props.history.push("/");
   }
 
   public componentDidMount() {
@@ -53,11 +62,21 @@ export default class WorkbenchHeader extends React.Component<IProps, any> {
             </div>
 
             <div className='header__right_panel'>
-                <img src={user_icon} alt='user_icon' className='header__user_icon'/>
-                <img src={menu_down} alt='profile_drop_down' className='header__menu_drop_down'/>
+                <span className='header__logout' onClick={() => this.handleLogout()}>Logout</span>
+                {/* <img src={user_icon} alt='user_icon' className='header__user_icon'/>
+                <img src={menu_down} alt='profile_drop_down' className='header__menu_drop_down'/> */}
             </div>
         </div>
       </React.Fragment>
     );
   }
 }
+
+const mapStateToProps = (state: any): IProps => ({});
+
+const mapDispatchToProps = (dispatch: any): IProps => ({});
+
+export default withRouter(connect<IProps, IProps>(
+  mapStateToProps,
+  mapDispatchToProps,
+)(WorkbenchHeader));

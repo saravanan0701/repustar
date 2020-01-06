@@ -152,29 +152,3 @@
     line-height: 21px;	
     text-align: center;
 }
-
-.articles_navigation_tool_container{
-    display: flex;
-    width: 100%;
-}
-
-.articles_navigation_tool_container--back_button{
-    margin-bottom: 30px;
-    width: 100%;
-    color: #006BE1;	
-    font-family: "SF Pro Text";	
-    font-size: 16px;	
-    line-height: 16px;
-    text-decoration:none;
-}
-
-.articles_navigation_tool_container--article_count{
-    justify-content: flex-end;
-    width: 100%;
-    text-align: right;
-    color: rgba(0,0,0,0.85);	
-    font-family: "SF Pro Text";	
-    font-size: 20px;	
-    font-weight: bold;	
-    line-height: 24px;
-}

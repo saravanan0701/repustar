@@ -1,4 +1,4 @@
-//import Styles from './Layout.Auth.css';
+import './Layout.Auth.css';
 import * as React from 'react';
 
 interface IProps {
@@ -23,7 +23,7 @@ export default class LayoutAuth extends React.Component<IProps, any> {
         <div>
           <title>Repustar | {this.props.title}</title>
         </div>
-        <div>
+        <div className='auth_container'>
           {this.props.children}
         </div>
       </React.Fragment>

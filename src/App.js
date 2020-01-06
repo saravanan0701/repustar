@@ -4,17 +4,29 @@ import { history } from './helpers';
 import { PrivateRoute } from './routes/PrivateRoute';
 import { connect } from 'react-redux';
 import { Login, WorkbenchHome, WorkbenchTags } from "./pages/";
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
+import ReduxToastr from 'react-redux-toastr';
 
 class AppComponent extends Component {
 	render() {
 		return (
       <Router history={history}>
         <div>
+			<ReduxToastr
+				timeOut={2000}
+				newestOnTop={false}
+				preventDuplicates
+				position="top-right"
+				getState={(state) => state.toastr} 
+				transitionIn="fadeIn"
+				transitionOut="fadeOut"
+				progressBar={false}
+				closeOnToastrClick={false}/>
             <Switch>
               <PrivateRoute exact path='/home' component={Login} />
               <Route exact path='/' component={Login} />
-			  <Route exact path='/work-bench-home' component={WorkbenchHome} />
-			  <Route exact path='/work-bench-tags-validation' component={WorkbenchTags} />
+			  <PrivateRoute exact path='/work-bench-home' component={WorkbenchHome} />
+			  <PrivateRoute exact path='/work-bench-tags-validation' component={WorkbenchTags} />
             </Switch>
         </div>
       </Router>
