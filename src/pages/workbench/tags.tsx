@@ -22,6 +22,7 @@ interface IState {
     newTag: string;
     isPendingArticle: boolean;
     isLastArticle: boolean;
+    acticeArticlesListLength: number;
 }
   
 interface IProps {
@@ -38,14 +39,15 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
     public constructor(props: any) {
         super(props);
         this.state = {
-        articleList: [],
-        error: false,
-        errorMessage: '',
-        rowIndex: 0,
-        columnIndex: 0,
-        newTag: '',
-        isPendingArticle: false,
-        isLastArticle: false,
+            articleList: [],
+            error: false,
+            errorMessage: '',
+            rowIndex: 0,
+            columnIndex: 0,
+            newTag: '',
+            isPendingArticle: false,
+            isLastArticle: false,
+            acticeArticlesListLength: 0,
         };
         this.handleAddTag = this.handleAddTag.bind(this);
         this.showAddTag = this.showAddTag.bind(this);
@@ -73,8 +75,13 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
             this.props.doHandleArticleTagsResponse(response.body);
             this.props.setActiveArticleIndex(article_index);
             this.props.setActiveArticle(this.props.articlesTagValidation.active_wb_article_list[this.props.articlesTagValidation.active_article_index]);
-            if(this.props.articlesTagValidation.active_wb_article_list.length - 1 === parseInt(article_index)){
+            if(this.props.articlesTagValidation.active_wb_article_list.length === 1){
                 this.setState({isLastArticle : true});
+            }
+            if(this.state.isPendingArticle){
+                this.setState({acticeArticlesListLength: this.props.articlesTagValidation.pending_articles.length});
+            }else{
+                this.setState({acticeArticlesListLength: this.props.articlesTagValidation.completed_articles.length});
             }
         }).catch((error: IError) => {
             console.log(error);
@@ -107,6 +114,7 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
         const article_validated_id = this.props.articlesTagValidation.active_article.article_validated_id;
         this.repositories.saveArticleTags(this.props.articlesTagValidation.active_article, article_validated_id).then((response) => {
             toastr.success('','Article Tags Validated')
+            this.setState({acticeArticlesListLength: this.props.articlesTagValidation.pending_articles.length - 1});
         }).catch((error: IError) => {
             console.log(error);
         });
@@ -174,7 +182,7 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
                 <React.Fragment>
                     <div className='articles_list_container'>
                         <ArticleNavigationTool isPendingArticle = {this.state.isPendingArticle} 
-                            articleLength = { this.state.isPendingArticle ? this.props.articlesTagValidation.pending_articles.length : this.props.articlesTagValidation.completed_articles.length }
+                            articleLength = { this.state.acticeArticlesListLength }
                         />
                         {this.renderArticlesCard()}
                         <div className='article_tags_container'>
@@ -187,11 +195,10 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
                                         <input className='article_action_buttons_container--save' type='button' value='Save' onClick={() => this.saveArticleValidation()}></input>                          
                                 : <div></div>
                             }
-                            <input className='article_action_buttons_container--next_article' type='button' value='Next Article >' onClick={() => this.nextArticle()}></input>
-                            {/* {
+                            {
                                 this.state.isLastArticle ? <div></div>
                                 : <input className='article_action_buttons_container--next_article' type='button' value='Next Article >' onClick={() => this.nextArticle()}></input>
-                            } */}
+                            }
                         </div>  
                     </div> 
                 </React.Fragment>
