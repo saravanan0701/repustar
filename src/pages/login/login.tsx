@@ -6,7 +6,6 @@ import { RepositorieAuth } from '../../repositories/Repositorie.Auth';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { loginAction } from '../../redux/redux.auth/redux.auth.action';
-import ErrorCodes from '../../ErrorCodes';
 import { IError } from '../../interfaces/Interface.Error';
 import './login.css';
 

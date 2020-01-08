@@ -3,8 +3,6 @@ import * as React from 'react';
 //import Header from '../../../components/Component.Header/Component.Header';
 import './Module.Header.Workbench.css';
 import repustar_logo from '../../../static/repustar_logo.svg';
-import menu_down from '../../../static/menu_down.svg';
-import user_icon from '../../../static/user.svg';
 import { Auth } from "aws-amplify";
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
