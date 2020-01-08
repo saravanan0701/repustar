@@ -12,9 +12,9 @@ export default class LayoutAuth extends React.Component<IProps, any> {
 
   public componentDidMount() {
     const session = localStorage.getItem('repustar_token');
-    if (session) {
-      window.location.href = '/dashboard';
-    }
+    // if (session) {
+    //   window.location.href = '/dashboard';
+    // }
   }
 
   public render() {

@@ -44,8 +44,9 @@ class Login extends React.Component<IProps, IState> {
   }
 
   public doLogin() {
-    this.repositories.login(this.state.username, this.state.password).then((response) => {
+    this.repositories.login(this.state.username, this.state.password).then((response: any) => {
       localStorage.setItem('user_id', '1');
+      localStorage.setItem('repustar_token', response.signInUserSession.accessToken.jwtToken)
       this.props.history.push('/work-bench-home');      
     }).catch((error: IError) => {
       // Notification for failed login
