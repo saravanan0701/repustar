@@ -19,7 +19,7 @@ class WorkbenchHeader extends React.Component<IProps, any> {
 
   public handleLogout() {
     Auth.signOut();
-    //userHasAuthenticated(false);
+    localStorage.removeItem('user_id');
     this.props.history.push("/");
   }
 
