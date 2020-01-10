@@ -16,7 +16,7 @@ class AppComponent extends Component {
 				timeOut={2000}
 				newestOnTop={false}
 				preventDuplicates
-				position="top-right"
+				position="bottom-right"
 				getState={(state) => state.toastr} 
 				transitionIn="fadeIn"
 				transitionOut="fadeOut"

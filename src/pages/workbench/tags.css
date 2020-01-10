@@ -7,6 +7,10 @@
     width: 100%;
 }
 
+.article_tags_container__row:last-child{
+    border-bottom: none !important;
+}
+
 .article_tags_container__type{
     width: 10%;
     background-color: #CACACA;
@@ -18,6 +22,14 @@
     width: 90%;
     background-color: #DFE1E3;
     border-bottom: 1px solid #000000;
+}
+
+.article_tags_container__no_tags_text{
+    margin-left: 20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    display: flex;
+    justify-content: center;
 }
 
 .article_tags_container__tags--column{
@@ -73,6 +85,8 @@
     padding-left: 7px;
     padding-right: 6px;
     border-radius: 3.5px 0 0 3.5px;
+    border-right: none !important;
+    text-decoration: none !important;
 }
 
 .tags--sapn{
@@ -82,10 +96,31 @@
     padding-left: 14px;
     padding-right: 18px;
     width: 100%;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+.tag--span_completed_deleted{
+    border-right: solid 2px red !important;
+}
+
+.tag--span_completed_new{
+    border-right: solid 2px green !important;
+}
+
+.tag--span_deleted{
+    border: solid 2px red;
+    text-decoration: line-through;
+}
+
+.tag--span_new{
+    border: solid 2px green;
 }
 
 .delete_tag{
     padding-right: 16.28px;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
 }
 
 .add_new_tag {
@@ -116,8 +151,6 @@
 }
 
 .article_action_buttons_container{
-    height: 121px;
-    border: 1px solid #979797;	
     background-color: #E8EAEE;
     display: flex;
     width: 100%;
@@ -126,7 +159,6 @@
 
 .article_action_buttons_container--save{
     margin-right: 30px;
-    margin-top: 30px;
     height: 60px;	
     width: 270px;	
     background-color: #000000;
@@ -139,8 +171,6 @@
 }
 
 .article_action_buttons_container--next_article{
-    margin-right: 30px;
-    margin-top: 30px;
     height: 60px;	
     width: 270px;	
     background-color: #fffffe;
@@ -150,4 +180,27 @@
     font-weight: bold;	
     line-height: 21px;	
     text-align: center;
+}
+
+.article_comment_container{
+    height: 121px;
+    background-color: #E8EAEE;
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.article_comment{
+    width: 100%;
+    font-family: "SF Pro Text";	
+    font-size: 14px;	
+    line-height: 16px;
+    border: none;
+    padding-top: 20px;
+    padding-left: 20px;
+}
+
+.article_comment:focus{
+    outline: none;
 }

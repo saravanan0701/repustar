@@ -39,6 +39,7 @@ export default class ArticleTag extends React.Component<IProps, IState> {
 
     handleKeyDown(e: any){
         if (e.key === 'Enter') {
+            e.preventDefault();
             this.props.handleAddTag(this.props.rowIndex, this.state.newTag);
             this.setState({newTag : ''});
         }
@@ -52,11 +53,13 @@ export default class ArticleTag extends React.Component<IProps, IState> {
         this.props.showAddTag(columnIndex, rowIndex);
     }
 
-    deleteTag(columnIndex:number, rowIndex:number){
-        this.props.deleteTag(columnIndex, rowIndex);
+    deleteTag(columnIndex:number, rowIndex:number, tagKey: string){
+        this.props.deleteTag(columnIndex, rowIndex, tagKey);
     }
 
     public renderTagsCell(tagText:any, title: string, columnIndex: number, tagTypeIndex: number){
+        let currentKey:any = Object.keys(tagText);
+        
         if(tagText === 'Add New Tag'){
             if(this.props.rowIndex === tagTypeIndex && this.props.columnIndex === columnIndex){
                 return(<div className='article_tags_container__tags--column add_new_tag'>
@@ -73,12 +76,12 @@ export default class ArticleTag extends React.Component<IProps, IState> {
             }
         }else{
             return(<div className='article_tags_container__tags--column tags'>
-                <span className='tags--index'> {columnIndex} </span>
-                <span className='tags--sapn'>{tagText}</span>
+                <span className={`tags--index ${tagText[currentKey[0]] === 1 ? 'tag--span_new' : (tagText[currentKey[0]] === -1 ? 'tag--span_deleted' : '')}`}> {columnIndex} </span>
+                <span className={`tags--sapn ${tagText[currentKey[0]] === 1 ? 'tag--span_new' : (tagText[currentKey[0]] === -1 ? 'tag--span_deleted' : '')}`}>{Object.keys(tagText)}</span>
                 {
                     this.props.isPendingArticle 
-                    ? <img src={'./static/close-black.svg'} alt='delete_tag' className='delete_tag' onClick={() => this.deleteTag(columnIndex,tagTypeIndex)}/>
-                    : <div></div>
+                    ? <img src={'./static/close-black.svg'} alt='delete_tag' className={`delete_tag ${tagText[currentKey[0]] === 1 ? 'tag--span_new' : (tagText[currentKey[0]] === -1 ? 'tag--span_deleted' : '')}`} onClick={() => this.deleteTag(columnIndex,tagTypeIndex, currentKey[0])}/>
+                    : <div className={`${tagText[currentKey[0]] === 1 ? 'tag--span_completed_new' : (tagText[currentKey[0]] === -1 ? 'tag--span_completed_deleted' : '')}`}></div>
                 }
             </div>);
         }
@@ -92,7 +95,7 @@ export default class ArticleTag extends React.Component<IProps, IState> {
             }
             return acc;
           }, []);
-        
+
         if(this.props.isPendingArticle){
             if(res.length > 0){
                 if(res[res.length -1 ].length === 4){
@@ -130,10 +133,19 @@ export default class ArticleTag extends React.Component<IProps, IState> {
             <div className='article_tags_container__type'>
                 {tagTypeMapping[this.props.item.slice(1,-1)]}
             </div>
-            
-            <div className='article_tags_container__tags'>
-                {this.renderTagsRow(this.props.currentArticle, tagTypeMapping[this.props.item.slice(1,-1)], itemIndex+1)}
-            </div>
+            {
+                    this.props.isPendingArticle 
+                    ? <div className='article_tags_container__tags'>
+                            {this.renderTagsRow(this.props.currentArticle, tagTypeMapping[this.props.item.slice(1,-1)], itemIndex+1)}
+                        </div>
+                    : this.props.currentArticle.length !== 0 
+                    ? <div className='article_tags_container__tags'>
+                            {this.renderTagsRow(this.props.currentArticle, tagTypeMapping[this.props.item.slice(1,-1)], itemIndex+1)}
+                        </div>
+                    : <div className='article_tags_container__tags'>
+                            <span className='article_tags_container__no_tags_text'>No Tags Available</span>
+                      </div>
+            }
         </div>
     );
   }

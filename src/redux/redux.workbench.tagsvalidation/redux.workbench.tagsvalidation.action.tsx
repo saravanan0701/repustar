@@ -3,6 +3,7 @@ export const WBATV_SET_COMPLETED_ARTICLES = 'WBATV/WBATV_SET_COMPLETED_ARTICLES'
 export const WBATV_SET_ACTIVE_WB_ARTICLES_LIST = 'WBATV/WBATV_SET_ACTIVE_WB_ARTICLES_LIST';
 export const WBATV_SET_ACTIVE_WB_ARTICLES_INDEX = 'WBATV/WBATV_SET_ACTIVE_WB_ARTICLES_INDEX';
 export const WBATV_SET_ACTIVE_WB_ARTICLES = 'WBATV/WBATV_SET_ACTIVE_WB_ARTICLES';
+export const WBATV_ON_CHANGE_VALUES = 'WBATV/WBATV_ON_CHANGE_VALUES';
 
 export const getArticlesTag = (articlsList: any) => (dispatch: any) => {
   
@@ -36,7 +37,15 @@ export const setActiveArticleIndex = (articleIndex: any) =>{
 
 export const setActiveArticle = (article: any) =>{
   if(article.is_validated === false){
-    const validated_tags = [...article.tag_text];
+    const tags_text = [...article.tag_text];
+    
+    let validated_tags = tags_text.map((item)=>{
+      let initialValue: any = [];
+      return item.reduce((obj:any, innerItem: any) => {
+        return [...obj, {[innerItem]: 0}]
+      }, initialValue);
+  
+    });
     article['validated_tags'] = validated_tags;
   }
   
@@ -47,6 +56,14 @@ export const setActiveArticle = (article: any) =>{
       });    
   };
 }
+
+export const onChangeProps = (props: any, value: any) => {
+  return{
+    props,
+    value,
+    type: WBATV_ON_CHANGE_VALUES,
+  };
+};
 
 export const setActiveWBAciveArticles = (articlsList: any, listType: string) =>  {
   localStorage.setItem('active_list_type', listType);

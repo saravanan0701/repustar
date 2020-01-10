@@ -5,7 +5,11 @@ import { connect } from 'react-redux';
 import { RepositorieWorkbenchTagValidation } from '../../repositories/Repositorie.Workbench.TagValidation';
 import { IError } from '../../interfaces/Interface.Error';
 import { bindActionCreators } from 'redux';
-import { getArticlesTag, setActiveWBAciveArticles, setActiveArticle, setActiveArticleIndex } from '../../redux/redux.workbench.tagsvalidation/redux.workbench.tagsvalidation.action';
+import { getArticlesTag, 
+    setActiveWBAciveArticles, 
+    setActiveArticle, 
+    setActiveArticleIndex,
+    onChangeProps } from '../../redux/redux.workbench.tagsvalidation/redux.workbench.tagsvalidation.action';
 import './home.css';
 import './tags.css'; 
 import ArticleCard from '../../components/Component.ArticleCard/Component.ArticleCard';
@@ -32,6 +36,7 @@ interface IProps {
     setActiveArticle?: any;
     setActiveArticleIndex?: any;
     history?: any;
+    onChangeProps?: any;
 }
   
 class Tags extends WorkbenchDefaultView<IProps, IState> {
@@ -97,14 +102,23 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
     }
 
     public handleAddTag(rowIndex: number, newTag: string) {
-        this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1] = [...this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1], newTag];
+        let newTagObj:any = {};
+        newTagObj[newTag] = 1;
+        this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1] = [...this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1], newTagObj];
+        toastr.success('','Tag Added')
         this.setState({newTag : ''});
     }
 
-    public deleteTag(columnIndex:number, rowIndex:number){
+    public deleteTag(columnIndex:number, rowIndex:number, tagKey: string){
         const arr = this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1];
-        const result = [...arr.slice(0, columnIndex - 1), ...arr.slice(columnIndex)];
-        this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1] = result;
+        if(arr[columnIndex-1][tagKey] === 0){
+            arr[columnIndex-1][tagKey] = -1;
+            this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1] = arr;
+        }else {
+            const result = [...arr.slice(0, columnIndex - 1), ...arr.slice(columnIndex)];
+            this.props.articlesTagValidation.active_article.validated_tags[rowIndex - 1] = result;
+        }
+        toastr.warning('','Tag Deleted')
         this.setState({newTag : ''});
     }
 
@@ -118,6 +132,10 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
         }).catch((error: IError) => {
             console.log(error);
         });
+    }
+
+    handlePropsChange = (prop:any) => (event:any) => {
+        this.props.onChangeProps(prop, event.target.value);
     }
 
     public nextArticle(){
@@ -188,6 +206,17 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
                         <div className='article_tags_container'>
                             {this.renderArticlesTags()}    
                         </div>
+                        <div className='article_comment_container'>
+                            <textarea className='article_comment' placeholder='Add your comment (Optional)' 
+                                onChange={this.handlePropsChange('comment')}
+                                disabled= {
+                                    this.state.isPendingArticle 
+                                    ? false : true
+                                }
+                            >
+                                {this.props.articlesTagValidation.active_article.comment}
+                            </textarea>
+                        </div>
                         <div className='article_action_buttons_container'>
                             {
                             this.state.isPendingArticle 
@@ -216,6 +245,7 @@ class Tags extends WorkbenchDefaultView<IProps, IState> {
     setActiveWBAciveArticles: bindActionCreators(setActiveWBAciveArticles, dispatch),
     setActiveArticle: bindActionCreators(setActiveArticle, dispatch),
     setActiveArticleIndex: bindActionCreators(setActiveArticleIndex, dispatch),
+    onChangeProps: bindActionCreators(onChangeProps, dispatch),
   });
   
   export default withRouter(connect<IProps, IProps>(

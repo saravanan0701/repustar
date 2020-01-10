@@ -5,6 +5,7 @@ import {
     WBATV_SET_ACTIVE_WB_ARTICLES_LIST,
     WBATV_SET_ACTIVE_WB_ARTICLES_INDEX,
     WBATV_SET_ACTIVE_WB_ARTICLES,
+    WBATV_ON_CHANGE_VALUES,
 } from './redux.workbench.tagsvalidation.action';
 
 const initialState: IArticleTagsValidation = {
@@ -27,6 +28,10 @@ export const articlesTagValidation = (state = initialState, action: any) => {
       return Object.assign({}, state, { active_article_index: action.payload });
     case WBATV_SET_ACTIVE_WB_ARTICLES:
         return Object.assign({}, state, { active_article: action.payload });
+    case WBATV_ON_CHANGE_VALUES:
+      const onChangeState = Object.assign({}, state);
+      Object.assign(onChangeState.active_article, { [action.props]: action.value });
+      return onChangeState;
     default: return state; 
   }
 };
