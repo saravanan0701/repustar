@@ -30,5 +30,5 @@ export interface IArticleTagsValidationRequest {
     article_image: string;
     article_title: string;
     article_site_name: string;
-    comment: string;
+    comment?: string;
 }
