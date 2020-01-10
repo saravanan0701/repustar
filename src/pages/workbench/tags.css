@@ -101,20 +101,20 @@
 }
 
 .tag--span_completed_deleted{
-    border-right: solid 2px red !important;
+    border-right: solid 3px red !important;
 }
 
 .tag--span_completed_new{
-    border-right: solid 2px green !important;
+    border-right: solid 3px green !important;
 }
 
 .tag--span_deleted{
-    border: solid 2px red;
+    border: solid 3px red;
     text-decoration: line-through;
 }
 
 .tag--span_new{
-    border: solid 2px green;
+    border: solid 3px green;
 }
 
 .delete_tag{
