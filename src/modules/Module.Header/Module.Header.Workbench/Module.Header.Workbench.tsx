@@ -5,6 +5,7 @@ import './Module.Header.Workbench.css';
 import repustar_logo from '../../../static/repustar_logo.svg';
 import { Auth } from "aws-amplify";
 import { withRouter } from 'react-router';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 interface IProps {
@@ -44,19 +45,18 @@ class WorkbenchHeader extends React.Component<IProps, any> {
                 </span>
             </div>
             <div className='header__menu_panel'>
-                <ul className='header__menu--ul'>
-                    <li className='header__menu--list'>
-                        <span>
-                          <a href='/work-bench-home' className='header__menu--list_item'>Home</a>
-                          <hr className='header__menu--selected_item'></hr> 
-                        </span>
-                    </li>
-                    <li className='header__menu--list'>
-                        <span className='header__menu--list_item'>
-                          Help
-                        </span>
-                    </li>
-                </ul>
+              <div className='header__menu--ul'>
+                <div className='header__menu--list'>
+                  <NavLink to="/work-bench-home" activeClassName="selected" className='header__menu--list_item'>
+                    Articles
+                  </NavLink>
+                </div>
+                <div className='header__menu--list'>
+                  <NavLink to="/merge-tags" activeClassName="selected" className='header__menu--list_item'>
+                    Merge tags
+                  </NavLink>
+                </div>
+              </div>
             </div>
 
             <div className='header__right_panel'>

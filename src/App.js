@@ -3,7 +3,7 @@ import { Router, Switch, Route} from 'react-router-dom';
 import { history } from './helpers';
 import { PrivateRoute } from './routes/PrivateRoute';
 import { connect } from 'react-redux';
-import { Login, WorkbenchHome, WorkbenchTags } from "./pages/";
+import { Login, WorkbenchHome, WorkbenchTags, MergeTags } from "./pages/";
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import ReduxToastr from 'react-redux-toastr';
 
@@ -27,6 +27,7 @@ class AppComponent extends Component {
               <Route exact path='/' component={Login} />
 			  <PrivateRoute exact path='/work-bench-home' component={WorkbenchHome} />
 			  <PrivateRoute exact path='/work-bench-tags-validation' component={WorkbenchTags} />
+			  <PrivateRoute exact path='/merge-tags' component={MergeTags} />
             </Switch>
         </div>
       </Router>

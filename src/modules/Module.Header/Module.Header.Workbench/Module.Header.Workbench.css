@@ -32,8 +32,7 @@
 .header__menu_panel{
     width: 100%;
     display: flex;
-    margin-right: 115px;
-    justify-content: center;
+    margin-left: 92px;
     align-items: center;
     align-content: center;
 }
@@ -43,8 +42,7 @@
     padding: 0;
     list-style: none;
     display: flex;
-    width: 176px;
-    margin-top: 40px;
+    width: 220px;
 }
 
 .header__menu--list{
@@ -82,10 +80,11 @@
     width: 24px;
 }
 
-.header__menu--selected_item{
-    border: 2px solid #027AFF;
-    margin-top: 35px;
+a.header__menu--list_item.selected {
+    border-bottom: 4px solid #027AFF;
+    padding-bottom: 27px;
 }
+
 .header__logout{
     height: 21px;
     width: 50px;	

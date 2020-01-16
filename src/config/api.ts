@@ -4,4 +4,5 @@ export const baseUrl: string = 'https://sxuo98hxm8.execute-api.us-east-2.amazona
 export const endpoints = {
     login: 'post  ',
     articles_tagsvalidaiton: 'articles/tagsvalidation',
+    tags_tagsgrouping: 'tags/tagsgrouping',
 };
