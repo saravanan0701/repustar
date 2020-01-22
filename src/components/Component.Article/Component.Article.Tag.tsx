@@ -128,8 +128,12 @@ export default class ArticleTag extends React.Component<IProps, IState> {
 
   public render() {
     let itemIndex: any = this.props.itemIndex;
-    return (
-        <div key={this.props.keyCounter} className='article_tags_container__row'>
+    console.log('tagTypeMapping[this.props.item.slice(1,-1)] ', tagTypeMapping[this.props.item.slice(1,-1)]);
+    let tagCategories: any = tagTypeMapping[this.props.item.slice(1,-1)];
+
+    if(typeof(tagCategories) !== 'undefined'){
+        return (
+            <div key={this.props.keyCounter} className='article_tags_container__row'>
             <div className='article_tags_container__type'>
                 {tagTypeMapping[this.props.item.slice(1,-1)]}
             </div>
@@ -144,9 +148,14 @@ export default class ArticleTag extends React.Component<IProps, IState> {
                         </div>
                     : <div className='article_tags_container__tags'>
                             <span className='article_tags_container__no_tags_text'>No Tags Available</span>
-                      </div>
+                    </div>
             }
         </div>
-    );
+            
+        );
+    }else{
+        return(<div></div>)
+    }
+
   }
 }

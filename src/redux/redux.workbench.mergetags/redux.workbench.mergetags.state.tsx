@@ -10,4 +10,7 @@ export interface IMergeTags {
     active_tag_group_list?: ITagsGroupResponse[];
     display_tag_group_list?: ITagsGroupResponse[];
     active_tag_index?: number;
+    search_list?: string[];
+    last_evaluated_key?: string;
+    active_singular_tags_list?: any;
 }

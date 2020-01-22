@@ -5,4 +5,6 @@ export const endpoints = {
     login: 'post  ',
     articles_tagsvalidaiton: 'articles/tagsvalidation',
     tags_tagsgrouping: 'tags/tagsgrouping',
+    tags_searchtagsdirectory: 'tags/searchtagsdirectory',
+    tags_addtagdirectory: 'tags/addtagdirectory'
 };

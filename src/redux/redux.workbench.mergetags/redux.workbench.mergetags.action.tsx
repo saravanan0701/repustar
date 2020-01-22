@@ -4,6 +4,10 @@ export const WBMT_SET_ACTIVE_TAG_GROUP_LIST = 'WBMT/SET_ACTIVE_TAG_GROUP_LIST';
 export const WBMT_SET_TAG_GROUP_CATEGORY_LIST = 'WBMT/SET_TAG_GROUP_CATEGORY_LIST';
 export const WBMT_SET_ACTIVE_TAG_INDEX = 'WBMT/SET_ACTIVE_TAG_INDEX';
 export const WBMT_SET_DISPLAY_TAG_GROUP_LIST = 'WBMT/SET_DISPLAY_TAG_GROUP_LIST';
+export const WBMT_SET_SEARCH_TAG_LIST = 'WBMT/SET_SEARCH_TAG_LIST';
+export const WBMT_ON_CHANGE_VALUES = 'WBMT/ON_CHANGE_VALUES';
+export const WBMT_SET_ACTIVE_SINGULAR_LIST = 'WBMT/SET_ACTIVE_SINGULAR_LIST';
+export const WBMT_SET_LAST_EVALUATED_KEY = 'WBMT/SET_LAST_EVALUATED_KEY';
 
 
 export const setActiveCategory = (activeCategory: string) => {
@@ -26,12 +30,15 @@ export const setCategoryList = (categoryList: string[]) => {
 
 export const setTagGroupList = (tagGroupsList: any) => {
     tagGroupsList.map((item:any, i: number) => {
-        const tags_text = [...item.tags_group];  
-        let initialValue: any = [];
-        let validated_tags = tags_text.reduce((obj:any, innerItem: any) => {
-            return [...obj, {[innerItem]: 0}]
-        }, initialValue);
-        tagGroupsList[i]['validated_tags_list'] = validated_tags;
+        if(tagGroupsList[i]['is_validated'] !== 1){
+            const tags_text = [...item.tags_group];  
+            tagGroupsList[i]['validated_tags_list'] = tags_text;
+            tagGroupsList[i]['group_name'] = '';
+            tagGroupsList[i]['is_validated'] = 0;
+        }else{
+            const tags_text = [...item.validated_tags];  
+            tagGroupsList[i]['validated_tags_list'] = tags_text
+        }
     });
     
     return (dispatch: any) => {
@@ -45,12 +52,15 @@ export const setTagGroupList = (tagGroupsList: any) => {
 export const setActiveGroupList = (tagGroupsList: any) => {
 
     tagGroupsList.map((item:any, i: number) => {
-        const tags_text = [...item.tags_group];  
-        let initialValue: any = [];
-        let validated_tags = tags_text.reduce((obj:any, innerItem: any) => {
-            return [...obj, {[innerItem]: 0}]
-        }, initialValue);
-        tagGroupsList[i]['validated_tags_list'] = validated_tags;
+        if(tagGroupsList[i]['is_validated'] !== 1){
+            const tags_text = [...item.tags_group];  
+            tagGroupsList[i]['validated_tags_list'] = tags_text;
+            tagGroupsList[i]['group_name'] = '';
+            tagGroupsList[i]['is_validated'] = 0;
+        }else{
+            const tags_text = [...item.validated_tags];  
+            tagGroupsList[i]['validated_tags_list'] = tags_text
+        }
     });
     return (dispatch: any) => {
         dispatch({
@@ -69,6 +79,16 @@ export const setDisplayGroupList = (tagGroupsList: any) => {
     };
 }
 
+export const setSearchList = (searchList: []) => {
+    return (dispatch: any) => {
+        dispatch({
+            type: WBMT_SET_SEARCH_TAG_LIST,
+            payload: searchList,
+        });    
+    };
+}
+
+
 export const setActiveTagIndex = (activeTagIndex: number) => {
     return (dispatch: any) => {
         dispatch({
@@ -77,70 +97,25 @@ export const setActiveTagIndex = (activeTagIndex: number) => {
         });    
     };
 }
-// export const getArticlesTag = (articlsList: any) => (dispatch: any) => {
-  
-//   let pendingArticles = articlsList.filter( (it: any) => it.is_validated === false );
-//   dispatch({ type: WBATV_SET_PENDING_ARTICLES, payload: pendingArticles });
-  
-//   let completedArticles = articlsList.filter( (it: any) => it.is_validated === true );
-//   dispatch({ type: WBATV_SET_COMPLETED_ARTICLES, payload: completedArticles });
-//   if (localStorage.getItem('active_list_type') === 'completed_articles'){
-//     dispatch(setActiveList(completedArticles, 'completed_articles'));
-//   }else {
-//     dispatch(setActiveList(pendingArticles, 'pending_articles'));
-//   } 
-// };
 
-// export const setActiveList = (articlsList: any, listType: string) => {  
-//   return (dispatch: any) => {
-//       dispatch(setActiveWBAciveArticles(articlsList, listType));    
-//   };
-// };
+export const setActiveSingularTagsList = (tagsList: [], lastIndex: any) => (dispatch: any) => {
+    dispatch({ 
+        type: WBMT_SET_LAST_EVALUATED_KEY, 
+        payload: lastIndex 
+    });
+    dispatch({
+        type: WBMT_SET_ACTIVE_SINGULAR_LIST,
+        payload: tagsList,
+    });  
 
-// export const setActiveArticleIndex = (articleIndex: any) =>{
-//   localStorage.setItem('active_list_id', articleIndex);
-//   return (dispatch: any) => {
-//       dispatch({
-//         type: WBATV_SET_ACTIVE_WB_ARTICLES_INDEX,
-//         payload: articleIndex,
-//       });    
-//   };
-// }
+    //WBMT_SET_LAST_EVALUATED_KEY
+}
 
-// export const setActiveArticle = (article: any) =>{
-//   if(article.is_validated === false){
-//     const tags_text = [...article.tag_text];
-    
-//     let validated_tags = tags_text.map((item)=>{
-//       let initialValue: any = [];
-//       return item.reduce((obj:any, innerItem: any) => {
-//         return [...obj, {[innerItem]: 0}]
-//       }, initialValue);
-  
-//     });
-//     article['validated_tags'] = validated_tags;
-//   }
-  
-//   return (dispatch: any) => {
-//       dispatch({
-//         type: WBATV_SET_ACTIVE_WB_ARTICLES,
-//         payload: article,
-//       });    
-//   };
-// }
-
-// export const onChangeProps = (props: any, value: any) => {
-//   return{
-//     props,
-//     value,
-//     type: WBATV_ON_CHANGE_VALUES,
-//   };
-// };
-
-// export const setActiveWBAciveArticles = (articlsList: any, listType: string) =>  {
-//   localStorage.setItem('active_list_type', listType);
-//   return {
-//     type: WBATV_SET_ACTIVE_WB_ARTICLES_LIST,
-//     payload: articlsList,
-//   };
-// };
+export const onChangeProps = (props: any, index: any, value: any) => {
+    return{
+      props,
+      index,
+      value,
+      type: WBMT_ON_CHANGE_VALUES,
+    };
+  };

@@ -73,6 +73,11 @@
 
 .radio_label{
     margin-left: 12px;
+    cursor: pointer;	
+}
+
+.tags_radio_button{
+    cursor: pointer;
 }
 
 .merge_tag_body_container{
@@ -106,6 +111,13 @@
     border: none;
     padding-top: 19px;
     padding-left: 22px;
+    padding-bottom: 19px;
+    margin-right: 95px;
+}
+
+.verified_group_name{
+    width: 25rem;
+    padding-top: 19px;
     padding-bottom: 19px;
     margin-right: 95px;
 }
@@ -197,4 +209,55 @@
     width: 100%;
     padding-right: 20px;
     cursor: pointer;	
+}
+
+.delete_tag{
+    padding-right: 16.28px;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+}
+
+.add_new_tag {
+    width: 100%;
+    background-color: #ffffff;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 4px;
+    display: flex;
+    padding: 0px;
+}
+
+.add_new_tag--input{
+    width: 100%;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.add_new_tag--input:focus{
+    outline: none;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom:solid 1px black;
+}
+
+.search_drop_down{
+    display: grid;
+}
+
+.add_tag_container{
+    display: flex;
+    width: 100%;
+}
+
+.search_drop_down_list{
+    position: absolute;
+    z-index: 9000;
+    background: #ffffff;
+    width: 317px;
+    margin-top: 20px;
+    padding-left: 10px;
 }
