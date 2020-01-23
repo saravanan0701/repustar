@@ -6,7 +6,10 @@ export const tagTypeMapping : tTagTypeMapping = {
     tag_people: 'Person',
     tag_location: 'Place',
     tag_org: 'Organization',
-    category: 'Subject',
+    category: 'Subject'
+}
+
+export const mergeTagTypeMapping : tTagTypeMapping = {
     topic: 'Topic',
     location: 'Place',
     person: 'Person',

@@ -21,7 +21,8 @@ const initialState: IMergeTags = {
     display_tag_group_list: [],
     search_list: [],
     last_evaluated_key: '',
-    active_singular_tags_list: []
+    active_singular_tags_list: [],
+    new_tag_group: [],
 };
 
 export const mergeTags = (state = initialState, action: any) => {

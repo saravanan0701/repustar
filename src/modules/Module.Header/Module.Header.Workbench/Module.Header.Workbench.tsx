@@ -51,11 +51,11 @@ class WorkbenchHeader extends React.Component<IProps, any> {
                     Articles
                   </NavLink>
                 </div>
-                {/* <div className='header__menu--list'>
+                <div className='header__menu--list'>
                   <NavLink to="/merge-tags" activeClassName="selected" className='header__menu--list_item'>
                     Merge tags
                   </NavLink>
-                </div> */}
+                </div>
               </div>
             </div>
 

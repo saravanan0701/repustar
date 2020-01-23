@@ -13,4 +13,5 @@ export interface IMergeTags {
     search_list?: string[];
     last_evaluated_key?: string;
     active_singular_tags_list?: any;
+    new_tag_group?: [];
 }

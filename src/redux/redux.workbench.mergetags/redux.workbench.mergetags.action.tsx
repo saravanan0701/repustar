@@ -8,6 +8,7 @@ export const WBMT_SET_SEARCH_TAG_LIST = 'WBMT/SET_SEARCH_TAG_LIST';
 export const WBMT_ON_CHANGE_VALUES = 'WBMT/ON_CHANGE_VALUES';
 export const WBMT_SET_ACTIVE_SINGULAR_LIST = 'WBMT/SET_ACTIVE_SINGULAR_LIST';
 export const WBMT_SET_LAST_EVALUATED_KEY = 'WBMT/SET_LAST_EVALUATED_KEY';
+export const WBMT_SET_NEW_TAG_GROUP = 'WBMT/SET_NEW_TAG_GROUP';
 
 
 export const setActiveCategory = (activeCategory: string) => {
@@ -30,14 +31,18 @@ export const setCategoryList = (categoryList: string[]) => {
 
 export const setTagGroupList = (tagGroupsList: any) => {
     tagGroupsList.map((item:any, i: number) => {
-        if(tagGroupsList[i]['is_validated'] !== 1){
+        if(tagGroupsList[i]['validated_tags'] && tagGroupsList[i]['validated_tags'].length > 0){
+            const tags_text = [...item.validated_tags];  
+            tagGroupsList[i]['validated_tags_list'] = tags_text
+            if(tagGroupsList[i]['is_validated'] !== 1){
+                tagGroupsList[i]['group_name'] = '';
+                tagGroupsList[i]['is_validated'] = 0;
+            }
+        }else{
             const tags_text = [...item.tags_group];  
             tagGroupsList[i]['validated_tags_list'] = tags_text;
             tagGroupsList[i]['group_name'] = '';
             tagGroupsList[i]['is_validated'] = 0;
-        }else{
-            const tags_text = [...item.validated_tags];  
-            tagGroupsList[i]['validated_tags_list'] = tags_text
         }
     });
     
@@ -52,14 +57,18 @@ export const setTagGroupList = (tagGroupsList: any) => {
 export const setActiveGroupList = (tagGroupsList: any) => {
 
     tagGroupsList.map((item:any, i: number) => {
-        if(tagGroupsList[i]['is_validated'] !== 1){
+        if(tagGroupsList[i]['validated_tags'] && tagGroupsList[i]['validated_tags'].length > 0){
+            const tags_text = [...item.validated_tags];  
+            tagGroupsList[i]['validated_tags_list'] = tags_text
+            if(tagGroupsList[i]['is_validated'] !== 1){
+                tagGroupsList[i]['group_name'] = '';
+                tagGroupsList[i]['is_validated'] = 0;
+            }
+        }else{
             const tags_text = [...item.tags_group];  
             tagGroupsList[i]['validated_tags_list'] = tags_text;
             tagGroupsList[i]['group_name'] = '';
             tagGroupsList[i]['is_validated'] = 0;
-        }else{
-            const tags_text = [...item.validated_tags];  
-            tagGroupsList[i]['validated_tags_list'] = tags_text
         }
     });
     return (dispatch: any) => {
@@ -98,17 +107,18 @@ export const setActiveTagIndex = (activeTagIndex: number) => {
     };
 }
 
-export const setActiveSingularTagsList = (tagsList: [], lastIndex: any) => (dispatch: any) => {
-    dispatch({ 
-        type: WBMT_SET_LAST_EVALUATED_KEY, 
-        payload: lastIndex 
-    });
+export const setActiveSingularTagsList = (tagsList: []) => (dispatch: any) => {
     dispatch({
         type: WBMT_SET_ACTIVE_SINGULAR_LIST,
         payload: tagsList,
     });  
+}
 
-    //WBMT_SET_LAST_EVALUATED_KEY
+export const setLastEvaluatedKey = (lastIndex: any) => (dispatch: any) => {
+    dispatch({ 
+        type: WBMT_SET_LAST_EVALUATED_KEY, 
+        payload: lastIndex 
+    });
 }
 
 export const onChangeProps = (props: any, index: any, value: any) => {
@@ -119,3 +129,10 @@ export const onChangeProps = (props: any, index: any, value: any) => {
       type: WBMT_ON_CHANGE_VALUES,
     };
   };
+
+export const setNewTagsList =(tagsList: []) => (dispatch: any) => {
+    dispatch({
+        type: WBMT_SET_NEW_TAG_GROUP,
+        payload: tagsList,
+    });  
+}
