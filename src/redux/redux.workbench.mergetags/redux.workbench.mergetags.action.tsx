@@ -63,10 +63,12 @@ export const setActiveGroupList = (tagGroupsList: any) => {
             if(tagGroupsList[i]['is_validated'] !== 1){
                 tagGroupsList[i]['group_name'] = '';
                 tagGroupsList[i]['is_validated'] = 0;
+                tagGroupsList[i]['deleted_tags_list'] = [];
             }
         }else{
             const tags_text = [...item.tags_group];  
             tagGroupsList[i]['validated_tags_list'] = tags_text;
+            tagGroupsList[i]['deleted_tags_list'] = [];
             tagGroupsList[i]['group_name'] = '';
             tagGroupsList[i]['is_validated'] = 0;
         }

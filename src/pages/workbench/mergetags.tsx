@@ -16,6 +16,7 @@ import { mergeTagTypeMapping } from '../../config';
 // import { clone, cloneDeep } from "lodash"
 import _ from 'lodash';
 import {toastr} from 'react-redux-toastr';
+import ModalPopUpComponent from "../../components/Component.Modal/Component.Modal";
 
 
 interface IState {
@@ -40,6 +41,16 @@ interface IState {
     isPendingArticle: boolean;
     isLastEvaluatedKey?:boolean;
     newGroupName?: string;
+    showTagExistModal?: boolean;
+    popupMessage?: string;
+    popupTitle?: string;
+    showRemoveConfirmation?: boolean;
+    showUngroupConfirmation?: boolean;
+    showDeleteConfirmation?: boolean;
+    removeTag?: string;
+    removeIndex?: number;
+    generalAlert?: boolean;
+    unGroupIndex?: number;
 }
   
 interface IProps {
@@ -86,9 +97,22 @@ class MergeTags extends WorkbenchDefaultView<IProps, IState> {
             showNewTagName: false,
             isPendingArticle: false,
             isLastEvaluatedKey: false,
+            showTagExistModal: false,
+            popupMessage:'',
+            popupTitle: '',
+            showRemoveConfirmation: false,
+            showUngroupConfirmation: false,
+            showDeleteConfirmation: false,
+            removeTag: '',
+            removeIndex: 0,
+            generalAlert: false,
+            unGroupIndex: 0,
         };
         this.handleAddTag = this.handleAddTag.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.clearTag = this.clearTag.bind(this);
+        this.removeTagHandler = this.removeTagHandler.bind(this);
+        this.unGroupHandler = this.unGroupHandler.bind(this);
     }
 
     public setPageTitle() {
@@ -303,10 +327,20 @@ class MergeTags extends WorkbenchDefaultView<IProps, IState> {
                 return item;
             }
         });
-        this.repositories.updateTagsGroup(tagGroup[0], tagGroup[0].id).then((response) => {
-            toastr.success('','Tags Groups Validated Successfully');
-            this.getTags();
-        });
+
+        if(tagGroup[0].group_name !== ''){
+            this.repositories.updateTagsGroup(tagGroup[0], tagGroup[0].id).then((response) => {
+                toastr.success('','Tags Groups Validated Successfully');
+                this.getTags();
+            });
+        }else{
+            this.setState({
+                generalAlert: true,
+                popupMessage: 'Group Must Have Group Name',
+                popupTitle: 'Notification'
+            })
+        }
+        
     }
 
     public saveTagsGroup(){
@@ -418,7 +452,7 @@ class MergeTags extends WorkbenchDefaultView<IProps, IState> {
                                             name="tagGroupName"
                                             value={item.group_name}
                                             ></input>
-                                            <span className='ungroup_all'> Ungroup all tags </span>
+                                            <span className='ungroup_all' onClick={() => this.unGroupAll(i)}> Ungroup all tags </span>
                                         </div>
                                 }
     
@@ -518,6 +552,18 @@ class MergeTags extends WorkbenchDefaultView<IProps, IState> {
         }
     }
 
+    
+
+    public renderModal(){
+        console.log('Show Modal');
+        this.setState({
+            showTagExistModal: true,
+            popupMessage: 'The tag is already part of a different group',
+            popupTitle: 'Notification'
+        });
+    }
+
+
     public handleKeyDown(e: any){
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -525,6 +571,7 @@ class MergeTags extends WorkbenchDefaultView<IProps, IState> {
             if(this.state.newTagRefObj){
                 if(this.state.newTagRefObj.is_grouped === 1){
                     console.log('Alert the User that the tag is already part of a different group');
+                    this.renderModal();
                 }else{
                     //console.log('Alert the User that the tag is already part of a different group');
                     this.props.mergeTags.active_tag_group_list.filter((item: any)=>{
@@ -576,22 +623,75 @@ class MergeTags extends WorkbenchDefaultView<IProps, IState> {
             })
     }
 
-    public removeTag(tag: string, rowIndex: number){
+    public removeTagHandler(){
+        console.log('Remove Handler');
+        console.log('removeTag', this.state.removeTag);
+        console.log('rowIndex', this.state.removeIndex);
+        
+        let rowIndex: any = this.state.removeIndex;
         let removeTagGroup = this.props.mergeTags.active_tag_group_list.filter((item: any, index: number)=>{
             if(index === rowIndex){
-                if(item['validated_tags_list'].indexOf(tag) > -1){
-                    const columnIndex = item['validated_tags_list'].indexOf(tag);
+                if(item['validated_tags_list'].indexOf(this.state.removeTag) > -1){
+                    const columnIndex = item['validated_tags_list'].indexOf(this.state.removeTag);
                     item['validated_tags_list'].splice(columnIndex, 1);
                     item['validated_tags_list'] = item['validated_tags_list'];
+                    item['deleted_tags_list'].push(this.state.removeTag)
                 }
                 return item;
             }
         });
-        this.repositories.removeTagFromGroup(tag, removeTagGroup[0].id, removeTagGroup[0].validated_tags_list).then((response) => {
-            console.log('response ', response.body);
-            toastr.success('','Tags Removed from the group Successfully');
-            //this.getTags();
+        console.log('removeTagGroup ', removeTagGroup);
+        this.props.mergeTags.active_tag_group_list[rowIndex] = removeTagGroup[0];
+        console.log('this.props.mergeTags.active_tag_group_list ', this.props.mergeTags.active_tag_group_list);
+        this.setState({
+            removeTag: '',
+            removeIndex: 0
         });
+        // this.repositories.removeTagFromGroup(tag, removeTagGroup[0].id, removeTagGroup[0].validated_tags_list).then((response) => {
+        //     console.log('response ', response.body);
+        //     toastr.success('','Tags Removed from the group Successfully');
+        //     //this.getTags();
+        // });
+    }
+
+    public unGroupHandler(){
+        console.log('Un Group Handler');
+        console.log('removeTag', this.state.unGroupIndex);
+        let rowIndex: any = this.state.unGroupIndex;
+
+        //this.props.mergeTags.active_tag_group_list[rowIndex]['deleted_tags_list'] = 
+        let deletedlist =[...this.props.mergeTags.active_tag_group_list[rowIndex]['deleted_tags_list'], ...this.props.mergeTags.active_tag_group_list[rowIndex]['tags_group']]
+        this.props.mergeTags.active_tag_group_list[rowIndex]['deleted_tags_list'] = deletedlist;
+        this.props.mergeTags.active_tag_group_list[rowIndex]['ungroup_all'] = 1;
+        //this.props.mergeTags.active_tag_group_list[rowIndex]['validated_tags_list'] = [];
+    }
+
+    public unGroupAll(rowIndex: number){
+        //unGroupIndex
+        this.setState({
+            showUngroupConfirmation: true,
+            popupMessage: 'Do you want to Ungroup All tags from the group',
+            popupTitle: 'Remove Confirmation',
+            unGroupIndex: rowIndex
+        })
+    }
+
+    public clearTag(){
+        console.log('Clear Tag');
+        
+        this.setState({showSearch : false});   
+        this.setState({newTag : ''});
+        this.setState({newTagRefObj : ''});
+    }
+
+    public removeTag(tag: string, rowIndex: number){
+        this.setState({
+            showRemoveConfirmation: true,
+            popupMessage: 'Do you want to Remove this tag from the group',
+            popupTitle: 'Remove Confirmation',
+            removeTag: tag,
+            removeIndex: rowIndex
+        })
     }
 
     public renderTagText(item: any, rowIndex: number, isValidated: number){
@@ -833,6 +933,43 @@ class MergeTags extends WorkbenchDefaultView<IProps, IState> {
                                 {this.renderTagGroups()}
                             </div>
                         </div>
+                        {
+                            this.state.showTagExistModal
+                            ? <ModalPopUpComponent message={this.state.popupMessage} title={this.state.popupTitle} showCancel={false}
+                                onOkHandle={this.clearTag}
+                              />
+                            : <div></div>
+                        }
+
+                        {
+                            this.state.showRemoveConfirmation
+                            ?  <ModalPopUpComponent message={this.state.popupMessage} title={this.state.popupTitle} showCancel={true}
+                                 onOkHandle={this.removeTagHandler}
+                                />
+                            : <div></div>
+                        }
+
+                        {
+                            this.state.showDeleteConfirmation
+                            ?  <ModalPopUpComponent message={this.state.popupMessage} title={this.state.popupTitle} showCancel={true}
+                                 onOkHandle={this.removeTagHandler}
+                                />
+                            : <div></div>
+                        }
+                        {
+                            this.state.generalAlert
+                            ?<ModalPopUpComponent message={this.state.popupMessage} title={this.state.popupTitle} showCancel={false}
+                            />
+                            : <div></div>
+                        }
+
+                        {
+                            this.state.showUngroupConfirmation
+                            ?  <ModalPopUpComponent message={this.state.popupMessage} title={this.state.popupTitle} showCancel={true}
+                                 onOkHandle={this.unGroupHandler}
+                                />
+                            : <div></div>
+                        }
                     </React.Fragment>
                 );
         }

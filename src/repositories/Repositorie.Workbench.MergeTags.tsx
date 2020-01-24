@@ -67,6 +67,7 @@ export class RepositorieWorkbenchMergeTags extends BaseApi {
   }
 
   public updateTagsGroup(tagGroup: string, id: string){
+    console.log('tagGroup ', tagGroup);
     return new Promise<IAPIResponse<ITagsListResponse[]>>((resolve, reject) => {
       const apiEndPoint = endpoints.tags_tagsgrouping + '?groupId=' + id;
       this.getInstance().put(apiEndPoint, tagGroup).then((response) => {

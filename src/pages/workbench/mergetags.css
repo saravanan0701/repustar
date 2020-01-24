@@ -74,6 +74,7 @@
     font-size: 14px;
     font-weight: bold;	
     line-height: 16px;
+    cursor: pointer;
 }
 
 .add_group:focus{
@@ -149,6 +150,7 @@
     display: flex;
     justify-content: flex-end;
     padding-top: 19px;
+    cursor: pointer;
 }
 
 .tag_list_container{
@@ -210,6 +212,11 @@
     padding-top: 20px;
     padding-bottom: 20px;
     width: 25rem;
+    cursor: pointer;
+}
+
+.save_tag:focus{
+    outline: none;
 }
 
 .add_tag{
@@ -312,4 +319,5 @@
     font-weight: bold;	
     line-height: 21px;	
     text-align: center;
+    cursor: pointer;
 }
