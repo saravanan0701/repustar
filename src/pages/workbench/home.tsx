@@ -6,7 +6,7 @@ import { RepositorieWorkbenchTagValidation } from '../../repositories/Repositori
 import { IError } from '../../interfaces/Interface.Error';
 import Header from '../../modules/Module.Header/Module.Header';
 import { bindActionCreators } from 'redux';
-import { getArticlesTag, 
+import { getArticlesTag,
     setActiveWBAciveArticles,
     setActiveArticleIndex,
     setActiveArticle
@@ -20,7 +20,7 @@ interface IState {
     errorMessage: string;
     activeList: string;
 }
-  
+
 interface IProps {
     doHandleArticleTagsResponse?: any;
     articlesTagValidation?: any;
@@ -29,7 +29,7 @@ interface IProps {
     setActiveArticle?: any;
     history?: any;
 }
-  
+
 class Home extends WorkbenchDefaultView<IProps, IState> {
     private repositories = new RepositorieWorkbenchTagValidation();
     public constructor(props: any) {
@@ -74,11 +74,11 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
         this.setState({ activeList: listType })
     }
 
-    public renderArticles(){        
+    public renderArticles(){
         if (this.props.articlesTagValidation.active_wb_article_list && this.props.articlesTagValidation.active_wb_article_list.length > 0) {
             return this.props.articlesTagValidation.active_wb_article_list.map((item: any, i:number) => (
                 <div key={i} onClick={() => this.validateTags(i)}>
-                    <ArticleCard article_image={item.article_image} 
+                    <ArticleCard article_image={item.article_image}
                         article_title={item.article_title}
                         is_target_blank={false}
                         article_site_name={item.article_site_name} />
@@ -104,18 +104,18 @@ class Home extends WorkbenchDefaultView<IProps, IState> {
         );
     }
 }
-  
+
   const mapStateToProps = (state: any): IProps => ({
     articlesTagValidation: state.articlesTagValidation
   });
-  
+
   const mapDispatchToProps = (dispatch: any): IProps => ({
     doHandleArticleTagsResponse: bindActionCreators(getArticlesTag, dispatch),
     setActiveWBAciveArticles: bindActionCreators(setActiveWBAciveArticles, dispatch),
     setActiveArticleIndex: bindActionCreators(setActiveArticleIndex, dispatch),
     setActiveArticle: bindActionCreators(setActiveArticle, dispatch),
   });
-  
+
   export default withRouter(connect<IProps, IProps>(
     mapStateToProps,
     mapDispatchToProps,

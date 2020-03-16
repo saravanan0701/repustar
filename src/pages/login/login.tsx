@@ -47,7 +47,7 @@ class Login extends React.Component<IProps, IState> {
     this.repositories.login(this.state.username, this.state.password).then((response: any) => {
       localStorage.setItem('user_id', response.username);
       localStorage.setItem('repustar_token', response.signInUserSession.accessToken.jwtToken)
-      this.props.history.push('/work-bench-home');      
+      this.props.history.push('/work-bench-home');
     }).catch((error: IError) => {
       // Notification for failed login
     });
@@ -61,19 +61,19 @@ class Login extends React.Component<IProps, IState> {
             <span className='auth_subtext'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
 
             <div className='auth_input_container'>
-              <input type='text' 
+              <input type='text'
                 className='auth_input'
                 placeholder='Email'
                 onChange={(e) => this.setState({ username: e.currentTarget.value })}
                 ></input>
-              <input type='password' 
+              <input type='password'
                 className='auth_input'
                 placeholder='Password'
                 onChange={(e) => this.setState({ password: e.currentTarget.value })}
                 onKeyDown={(e) => this.handleKeyDown(e)}
                 ></input>
-            </div>        
-            <button 
+            </div>
+            <button
               className='auth_action_button'
               onClick={() => this.doLogin()}
             >Login</button>
